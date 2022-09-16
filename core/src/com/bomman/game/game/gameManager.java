@@ -1,12 +1,12 @@
 package com.bomman.game.game;
 
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.assets.AssetManager;
 
 public class gameManager implements Disposable {
     private final AssetManager assetManager;
@@ -14,6 +14,9 @@ public class gameManager implements Disposable {
 
     /* TODO: Game Properties. */
     private static final int levels = 5;
+    private static int enemiesLeft;
+    private static boolean gameOver;
+    private static boolean gameFinish;
 
 
     /* TODO: Player Properties. */
@@ -30,7 +33,7 @@ public class gameManager implements Disposable {
     private Vector2 playerGoalPos;
 
     /* Media Properties. */
-    private Music currentMusic;
+    private String currentMusic = "";
 
     /**
      * Constructor.
@@ -154,7 +157,7 @@ public class gameManager implements Disposable {
 
 
     public void playMusic(String name, boolean repeat) {
-        Music music = assetManager.get("musics/" + name);
+        Music music = assetManager.get("music/" + name);
         music.setVolume(0.5f);
         /* Repeating Music. */
         if (currentMusic.equals(music)) {
@@ -163,9 +166,42 @@ public class gameManager implements Disposable {
                 music.play();
             }
         }
+        stopMusic();
+        music.setLooping(repeat);
+        music.play();
+        currentMusic = name;
+    }
+
+
+    public void playMusic() {
+        if (!currentMusic.isEmpty()) {
+            Music music = assetManager.get("music/" + currentMusic, Music.class);
+            music.play();
+        }
         return;
     }
 
+
+    public void pauseMusic() {
+        if (!currentMusic.isEmpty()) {
+            Music music = assetManager.get("music/" + currentMusic, Music.class);
+            if (music.isPlaying()) {
+                music.pause();
+            }
+        }
+        return;
+    }
+
+
+    public void stopMusic() {
+        if (!currentMusic.isEmpty()) {
+            Music music = assetManager.get("music/" + currentMusic, Music.class);
+            if (music.isPlaying()) {
+                music.stop();
+            }
+        }
+        return;
+    }
 
     /**
      * Asset Manager getter.

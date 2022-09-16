@@ -38,6 +38,9 @@ public class mainMenuDP extends ScreenAdapter {
         style = new Label.LabelStyle();
         style.font = this.font;
         style.fontColor = Color.WHITE;
+        Label title = new Label("Bomman", style);
+        title.setFontScale(1.6f);
+        title.setPosition(140,360);
 
         Pixmap pixmap = new Pixmap(640, 480, Pixmap.Format.RGB888);
         pixmap.setColor(240/255.0f, 128/255.0f, 0, 1.0f);

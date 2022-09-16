@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.bomman.game.BGame;
+import com.bomman.game.game.gameManager;
 
 public class playDP extends ScreenAdapter {
     private final BGame bGame;
