@@ -12,9 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.bomman.game.BGame;
+import com.bomman.game.game.gameManager;
 
 
-public class mainMenu extends ScreenAdapter {
+public class mainMenuDP extends ScreenAdapter {
     private final BGame bGame;
     private final SpriteBatch batch;
     private FitViewport viewport;
@@ -22,7 +23,7 @@ public class mainMenu extends ScreenAdapter {
     private BitmapFont font;
     private Texture backgroundTexture;
 
-    public mainMenu(BGame bGame) {
+    public mainMenuDP(BGame bGame) {
         this.bGame = bGame;
         this.batch = bGame.getBatch();
     }
@@ -30,7 +31,7 @@ public class mainMenu extends ScreenAdapter {
     @Override
     public void show() {
         viewport = new FitViewport(640, 480);
-        stage = new Stage();
+        stage = new Stage(viewport, batch);
         font = new BitmapFont(Gdx.files.internal("fonts/foo.fnt"));
 
         Label.LabelStyle style;
@@ -47,6 +48,7 @@ public class mainMenu extends ScreenAdapter {
 
 
         stage.addActor(background);
+        gameManager.getInstance().playMusic("SuperBomberman-Title.ogg", true);
     }
 
     @Override

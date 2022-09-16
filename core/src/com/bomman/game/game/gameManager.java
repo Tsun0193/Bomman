@@ -29,6 +29,8 @@ public class gameManager implements Disposable {
     private Vector2 playerResPos;
     private Vector2 playerGoalPos;
 
+    /* Media Properties. */
+    private Music currentMusic;
 
     /**
      * Constructor.
@@ -148,6 +150,20 @@ public class gameManager implements Disposable {
     public void playSound(String name, float vol, float pitch, float pan) {
         Sound sound = assetManager.get("sounds/" + name, Sound.class);
         sound.play(vol, pitch, pan);
+    }
+
+
+    public void playMusic(String name, boolean repeat) {
+        Music music = assetManager.get("musics/" + name);
+        music.setVolume(0.5f);
+        /* Repeating Music. */
+        if (currentMusic.equals(music)) {
+            music.setLooping(repeat);
+            if (!music.isPlaying()) {
+                music.play();
+            }
+        }
+        return;
     }
 
 
