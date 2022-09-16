@@ -4,6 +4,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.assets.AssetManager;
 
@@ -24,6 +25,9 @@ public class gameManager implements Disposable {
     private static float playerBombGenerateTime = 0.0f;
     private static float playerBombGenerateTimeLeft = 0.0f;
     private static boolean playerBombInteractablity = false;
+
+    private Vector2 playerResPos;
+    private Vector2 playerGoalPos;
 
 
     /**
@@ -117,7 +121,7 @@ public class gameManager implements Disposable {
     /**
      * Add Live by 1.
      */
-    public void addLive(){
+    public void addLive() {
         playerLives++;
         playSound("Powerup.ogg");
     }
@@ -156,6 +160,7 @@ public class gameManager implements Disposable {
         return assetManager;
     }
 
+
     /**
      * Instance getter.
      *
@@ -163,6 +168,46 @@ public class gameManager implements Disposable {
      */
     public static gameManager getInstance() {
         return instance;
+    }
+
+
+    /**
+     * Player Respawn Position Setter.
+     *
+     * @param pos Vector2
+     */
+    public void setPlayerResPos(Vector2 pos) {
+        playerResPos = pos;
+    }
+
+
+    /**
+     * Player Respawn Position Getter.
+     *
+     * @return playerResPos
+     */
+    public Vector2 getPlayerResPos() {
+        return playerResPos;
+    }
+
+
+    /**
+     * Player Goal Position Setter.
+     *
+     * @param playerGoalPos Vector2.
+     */
+    public void setPlayerGoalPos(Vector2 playerGoalPos) {
+        this.playerGoalPos = playerGoalPos;
+    }
+
+
+    /**
+     * Player Goal Position Getter.
+     *
+     * @return playerGoalPos.
+     */
+    public Vector2 getPlayerGoalPos() {
+        return playerGoalPos;
     }
 
     @Override
