@@ -18,7 +18,7 @@ public class gameManager implements Disposable {
     private static final int levels = 5;
     private static int enemiesLeft;
     private static boolean gameOver;
-    private static boolean gameFinish;
+    private static boolean gameFinished;
     private Queue<Entity> remoteBombQueue;
 
 
@@ -206,6 +206,8 @@ public class gameManager implements Disposable {
         return;
     }
 
+    //Getters and Setters
+
     /**
      * Asset Manager getter.
      *
@@ -266,10 +268,41 @@ public class gameManager implements Disposable {
     }
 
 
+    /**
+     * Remote Bomb Queue Getter.
+     *
+     * @return
+     */
     public Queue<Entity> getRemoteBombQueue() {
         return remoteBombQueue;
     }
 
+
+    /**
+     * EnemiesLeft Setter.
+     * @param value int
+     */
+    public static void setEnemiesLeft(int value) {
+        enemiesLeft = value;
+    }
+
+
+    /**
+     * GameFinished Setter.
+     * @param bool  boolean
+     */
+    public static void setGameFinished(boolean bool) {
+        gameFinished = bool;
+    }
+
+
+    /**
+     * GameOver Setter.
+     * @param bool  boolean
+     */
+    public static void setGameOver(boolean bool) {
+        gameFinished = bool;
+    }
 
     @Override
     public void dispose() {
