@@ -1,5 +1,6 @@
 package com.bomman.game.game;
 
+import com.artemis.Entity;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -7,6 +8,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.Queue;
 
 public class gameManager implements Disposable {
     private final AssetManager assetManager;
@@ -17,6 +19,7 @@ public class gameManager implements Disposable {
     private static int enemiesLeft;
     private static boolean gameOver;
     private static boolean gameFinish;
+    private Queue<Entity> remoteBombQueue;
 
 
     /* TODO: Player Properties. */
@@ -261,6 +264,12 @@ public class gameManager implements Disposable {
     public Vector2 getPlayerGoalPos() {
         return playerGoalPos;
     }
+
+
+    public Queue<Entity> getRemoteBombQueue() {
+        return remoteBombQueue;
+    }
+
 
     @Override
     public void dispose() {
