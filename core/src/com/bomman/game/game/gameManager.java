@@ -55,6 +55,8 @@ public class gameManager implements Disposable {
         loadMaps(assetManager);
 
         assetManager.finishLoading();
+        playerResPos = new Vector2();
+        playerGoalPos = new Vector2();
     }
 
 
@@ -161,13 +163,14 @@ public class gameManager implements Disposable {
 
     public void playMusic(String name, boolean repeat) {
         Music music = assetManager.get("music/" + name);
-        music.setVolume(0.5f);
+        music.setVolume(0.4f);
         /* Repeating Music. */
-        if (currentMusic.equals(music)) {
+        if (currentMusic.equals(name)) {
             music.setLooping(repeat);
             if (!music.isPlaying()) {
                 music.play();
             }
+            return;
         }
         stopMusic();
         music.setLooping(repeat);
@@ -181,7 +184,6 @@ public class gameManager implements Disposable {
             Music music = assetManager.get("music/" + currentMusic, Music.class);
             music.play();
         }
-        return;
     }
 
 
@@ -234,7 +236,7 @@ public class gameManager implements Disposable {
      * @param pos Vector2
      */
     public void setPlayerResPos(Vector2 pos) {
-        playerResPos = pos;
+        playerResPos.set(pos);
     }
 
 
@@ -254,7 +256,7 @@ public class gameManager implements Disposable {
      * @param playerGoalPos Vector2.
      */
     public void setPlayerGoalPos(Vector2 playerGoalPos) {
-        this.playerGoalPos = playerGoalPos;
+        this.playerGoalPos.set(playerGoalPos);
     }
 
 
