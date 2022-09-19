@@ -282,6 +282,7 @@ public class gameManager implements Disposable {
 
     /**
      * EnemiesLeft Setter.
+     *
      * @param value int
      */
     public static void setEnemiesLeft(int value) {
@@ -291,7 +292,8 @@ public class gameManager implements Disposable {
 
     /**
      * GameFinished Setter.
-     * @param bool  boolean
+     *
+     * @param bool boolean
      */
     public static void setGameFinished(boolean bool) {
         gameFinished = bool;
@@ -300,7 +302,8 @@ public class gameManager implements Disposable {
 
     /**
      * GameOver Setter.
-     * @param bool  boolean
+     *
+     * @param bool boolean
      */
     public static void setGameOver(boolean bool) {
         gameFinished = bool;

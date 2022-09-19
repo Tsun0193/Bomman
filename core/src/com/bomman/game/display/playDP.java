@@ -1,8 +1,6 @@
 package com.bomman.game.display;
 
-import com.artemis.BaseSystem;
 import com.artemis.WorldConfiguration;
-import com.artemis.WorldConfigurationBuilder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
@@ -12,7 +10,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.physics.box2d.World;
 import com.bomman.game.BGame;
 import com.bomman.game.game.gameManager;
 
