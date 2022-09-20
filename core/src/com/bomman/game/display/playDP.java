@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.bomman.game.BGame;
 import com.bomman.game.game.gameManager;
 import com.bomman.game.gui.hud;
+import com.bomman.game.sys.renderSys;
 
 public class playDP extends ScreenAdapter {
     private final BGame bGame;
@@ -114,9 +115,9 @@ public class playDP extends ScreenAdapter {
             }
         } else {
             for (BaseSystem sys : world.getSystems()) {
-//                if (!(sys instanceof RenderSystem)) {
+                if (!(sys instanceof renderSys)) {
                     sys.setEnabled(false);
-//                }
+                }
             }
         }
 
