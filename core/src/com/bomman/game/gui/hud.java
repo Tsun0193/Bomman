@@ -3,12 +3,10 @@ package com.bomman.game.gui;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Disposable;
 import com.bomman.game.game.gameManager;
@@ -55,7 +53,14 @@ public class hud implements Disposable {
         pixmap.dispose();
 
         bombTimerSprite = new Sprite(bombTimerTexture);
+        bombTimerSprite.setBounds(16.0f, 12.5f, 3.0f, 0.2f);
 
+        powerSprite = new Sprite(new TextureRegion(textureAtlas.findRegion("Items"), 16,0,16,16));
+        speedSprite = new Sprite(new TextureRegion(textureAtlas.findRegion("Items"), 32,0,16,16));
+        remoteSprite = new Sprite(new TextureRegion(textureAtlas.findRegion("Items"), 64, 0, 16, 16));
+
+        lvLabel = new Label("Level", new Label.LabelStyle(new BitmapFont(Gdx.files.internal("fonts/foo.fnt")), Color.WHITE));
+        
         stringBuilder = new StringBuilder();
     }
 
