@@ -34,7 +34,7 @@ public class hud implements Disposable {
     private StringBuilder stringBuilder;
 
 
-    public hud(SpriteBatch batch, float width, float height){
+    public hud(SpriteBatch batch, float width, float height) {
         this.batch = batch;
         AssetManager assetManager = gameManager.getInstance().getAssetManager();
         textureAtlas = assetManager.get("img/actors.pack", TextureAtlas.class);
@@ -55,12 +55,11 @@ public class hud implements Disposable {
         bombTimerSprite = new Sprite(bombTimerTexture);
         bombTimerSprite.setBounds(16.0f, 12.5f, 3.0f, 0.2f);
 
-        powerSprite = new Sprite(new TextureRegion(textureAtlas.findRegion("Items"), 16,0,16,16));
-        speedSprite = new Sprite(new TextureRegion(textureAtlas.findRegion("Items"), 32,0,16,16));
+        powerSprite = new Sprite(new TextureRegion(textureAtlas.findRegion("Items"), 16, 0, 16, 16));
+        speedSprite = new Sprite(new TextureRegion(textureAtlas.findRegion("Items"), 32, 0, 16, 16));
         remoteSprite = new Sprite(new TextureRegion(textureAtlas.findRegion("Items"), 64, 0, 16, 16));
 
         lvLabel = new Label("Level", new Label.LabelStyle(new BitmapFont(Gdx.files.internal("fonts/foo.fnt")), Color.WHITE));
-        
         stringBuilder = new StringBuilder();
     }
 

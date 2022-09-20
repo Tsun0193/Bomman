@@ -23,14 +23,14 @@ public class gameManager implements Disposable {
 
 
     /* TODO: Player Properties. */
-    private static int playerLives = 3;
-    private static int playerBombCount = 3;
-    private static int playerBombRemaining = 0;
-    private static int playerMaxSpeed = 0;
-    private static int playerBombPow = 0;
-    private static float playerBombGenerateTime = 0.0f;
-    private static float playerBombGenerateTimeLeft = 0.0f;
-    private static boolean playerBombInteractablity = false;
+    public static int playerLives = 3;
+    public static int playerBombCount = 3;
+    public static int playerBombRemaining = 0;
+    public static int playerMaxSpeed = 0;
+    public static int playerBombPow = 0;
+    public static float playerBombGenerateTime = 0.0f;
+    public static float playerBombGenerateTimeLeft = 0.0f;
+    public static boolean playerBombInteractablity = false;
 
     private Vector2 playerResPos;
     private Vector2 playerGoalPos;
@@ -119,7 +119,7 @@ public class gameManager implements Disposable {
     /**
      * Reset Player Properties Function.
      */
-    public void resetPlayerProperties() {
+    public static void resetPlayerAttributes() {
         playerMaxSpeed = 0;
         playerBombCount = 3;
         playerBombPow = 0;
