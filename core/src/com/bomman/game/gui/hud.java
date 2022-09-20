@@ -54,6 +54,7 @@ public class hud implements Disposable {
         bombTimerTexture = new Texture(pixmap);
         pixmap.dispose();
 
+        bombTimerSprite = new Sprite(bombTimerTexture);
 
         stringBuilder = new StringBuilder();
     }
