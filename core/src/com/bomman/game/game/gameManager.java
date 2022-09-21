@@ -31,6 +31,8 @@ public class gameManager implements Disposable {
     public static float playerBombGenerateTime = 0.0f;
     public static float playerBombGenerateTimeLeft = 0.0f;
     public static boolean playerBombInteractablity = false;
+    public static boolean infLives;
+    public static boolean reset;
 
     private Vector2 playerResPos;
     private Vector2 playerGoalPos;
@@ -309,6 +311,10 @@ public class gameManager implements Disposable {
         gameFinished = bool;
     }
 
+    public static void difficultyRespawn(boolean b1, boolean b2) {
+        infLives = b1;
+        reset = b2;
+    }
     @Override
     public void dispose() {
         assetManager.dispose();

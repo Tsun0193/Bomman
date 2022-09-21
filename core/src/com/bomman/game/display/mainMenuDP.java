@@ -1,6 +1,7 @@
 package com.bomman.game.display;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -11,6 +12,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -87,9 +92,81 @@ public class mainMenuDP extends ScreenAdapter {
         gameManager.getInstance().playMusic("SuperBomberman-Title.ogg", true);
     }
 
+    public void handleInput() {
+        if(!selected) {
+            if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+                currentSelection--;
+                gameManager.getInstance().playSound("Pickup.ogg");
+
+                if (currentSelection < 0) {
+                    currentSelection += 3;
+                }
+
+                float yIndicator2 = yIndicator - currentSelection * 60.0f;
+
+                MoveToAction action = new MoveToAction();
+                action.setPosition(xIndicator, yIndicator2);
+                action.setDuration(0.2f);
+                indicator1.clearActions();
+                indicator1.addAction(action);
+                indicator2.setPosition(xIndicator, yIndicator2);
+            }
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+                currentSelection++;
+                gameManager.getInstance().playSound("Pickup.ogg");
+
+                if (currentSelection >= 3) {
+                    currentSelection -= 3;
+                }
+
+                float yIndicator2 = yIndicator - currentSelection * 60.f;
+
+                MoveToAction action = new MoveToAction();
+                action.setPosition(xIndicator, yIndicator2);
+                action.setDuration(0.2f);
+                indicator1.clearActions();
+                indicator1.addAction(action);
+                indicator2.setPosition(xIndicator, yIndicator2);
+            }
+
+            if (Gdx.input.isKeyJustPressed(Input.Keys.X) || Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
+                gameManager.getInstance().playSound("Teleport.ogg");
+
+                selected = true;
+
+                indicator1.setVisible(false);
+                indicator2.setVisible(true);
+
+                RunnableAction action = new RunnableAction();
+                action.setRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        switch (currentSelection) {
+                            case 0:
+                            case 1:
+                                gameManager.difficultyRespawn(true, true);
+                                break;
+                            case 2:
+                                gameManager.difficultyRespawn(false, true);
+                                break;
+                            default:
+                                gameManager.difficultyRespawn(true, false);
+                                break;
+                        }
+                        gameManager.playerLives = 3;
+                        bGame.setScreen(new playDP(bGame, 1));
+                    }
+                });
+
+                stage.addAction(new SequenceAction(Actions.delay(0.2f), Actions.fadeOut(1f), action));
+            }
+        }
+    }
+
     @Override
     public void render(float delta) {
-//        handleInput();
+        handleInput();
 
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
