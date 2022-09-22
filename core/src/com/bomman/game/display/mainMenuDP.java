@@ -58,6 +58,16 @@ public class mainMenuDP extends ScreenAdapter {
         title.setFontScale(1.6f);
         title.setPosition(140,360);
 
+        Label easyLabel = new Label("Easy", style);
+        easyLabel.setPosition((640 - easyLabel.getWidth()) / 2, 240);
+
+        Label normalLabel = new Label("Normal", style);
+        normalLabel.setPosition((640 - normalLabel.getWidth()) / 2, 180);
+
+        Label hardLabel = new Label("Hard", style);
+        hardLabel.setPosition((640 - hardLabel.getWidth()) / 2, 120);
+
+
         Pixmap pixmap = new Pixmap(640, 480, Pixmap.Format.RGB888);
         pixmap.setColor(240/255.0f, 128/255.0f, 0, 1.0f);
         pixmap.fill();
@@ -85,6 +95,9 @@ public class mainMenuDP extends ScreenAdapter {
         stage.addActor(background);
         stage.addActor(indicator);
         stage.addActor(title);
+        stage.addActor(easyLabel);
+        stage.addActor(normalLabel);
+        stage.addActor(hardLabel);
         stage.addActor(indicator1);
         stage.addActor(indicator2);
         currentSelection = 0;
@@ -165,13 +178,13 @@ public class mainMenuDP extends ScreenAdapter {
     }
 
     @Override
-    public void render(float delta) {
+    public void render(float f) {
         handleInput();
 
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        stage.act(delta);
+        stage.act(f);
         stage.draw();
     }
 
