@@ -195,11 +195,16 @@ public class mainMenuDP extends ScreenAdapter {
 
     @Override
     public void hide() {
+        gameManager.getInstance().stopMusic();
         dispose();
     }
 
     @Override
     public void dispose() {
+        backgroundTexture.dispose();
+        indicatorTexture.dispose();
+        stage.dispose();
+        font.dispose();
     }
 
 }
