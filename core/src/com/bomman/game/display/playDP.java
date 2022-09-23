@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.bomman.game.BGame;
 import com.bomman.game.game.gameManager;
 import com.bomman.game.gui.hud;
+import com.bomman.game.listeners.box2dListener;
 import com.bomman.game.sys.renderSys;
 
 public class playDP extends ScreenAdapter {
@@ -63,6 +64,7 @@ public class playDP extends ScreenAdapter {
         camera.position.set(WIDTH / 2, HEIGHT / 2, 0);
 
         box2DWorld = new World(new Vector2(), true);
+        box2DWorld.setContactListener(new box2dListener());
         box2DRenderer = new Box2DDebugRenderer();
 
         WorldConfiguration worldCfg = new WorldConfiguration();
