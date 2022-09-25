@@ -16,11 +16,20 @@ public class gameManager implements Disposable {
 
     /* TODO: Game Properties. */
     private static final int levels = 5;
-    private static int enemiesLeft;
+    public static int enemiesLeft;
     private static boolean gameOver;
     private static boolean gameFinished;
     private Queue<Entity> remoteBombQueue;
 
+    public static final short NOTHING_BIT = 0;
+    public static final short INDESTRUCTIIBLE_BIT = 1;
+    public static final short BREAKABLE_BIT = 1 << 1;
+    public static final short PLAYER_BIT = 1 << 2;
+    public static final short BOMB_BIT = 1 << 3;
+    public static final short EXPLOSION_BIT = 1 << 4;
+    public static final short ENEMY_BIT = 1 << 5;
+    public static final short POWERUP_BIT = 1 << 6;
+    public static final short PORTAL_BIT = 1 << 7;
 
     /* TODO: Player Properties. */
     public static int playerLives = 3;
