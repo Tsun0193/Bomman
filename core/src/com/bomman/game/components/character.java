@@ -16,8 +16,6 @@ public class character extends Component {
         moveUp,
         special
     }
-
-    ;
     public State state;
 
     public float maxSpeed;
@@ -29,8 +27,9 @@ public class character extends Component {
 
     public float bombRegenerateTimeLeft;
 
-    public boolean godmode = false;
+    public boolean godmode;
     public float godTimer;
+    public int receivedDmg;
 
     public character(boolean resetPlayerAttributes) {
         state = State.idleRight;
@@ -48,7 +47,7 @@ public class character extends Component {
         this.bombRegenerateTime = gameManager.playerBombGenerateTime;
         this.bombRegenerateTimeLeft = 0.0f;
         this.maxSpeed = 5.0f + gameManager.playerMaxSpeed * 1.25f;
-
+        this.receivedDmg = 0;
     }
 
     public void damage(int dmg) {

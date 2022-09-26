@@ -56,10 +56,20 @@ public class mainMenuDP extends ScreenAdapter {
         style.fontColor = Color.WHITE;
         Label title = new Label("Bomman", style);
         title.setFontScale(1.6f);
-        title.setPosition(140,360);
+        title.setPosition(140, 360);
+
+        Label easyLabel = new Label("Easy", style);
+        easyLabel.setPosition((640 - easyLabel.getWidth()) / 2, 240);
+
+        Label normalLabel = new Label("Normal", style);
+        normalLabel.setPosition((640 - normalLabel.getWidth()) / 2, 180);
+
+        Label hardLabel = new Label("Hard", style);
+        hardLabel.setPosition((640 - hardLabel.getWidth()) / 2, 120);
+
 
         Pixmap pixmap = new Pixmap(640, 480, Pixmap.Format.RGB888);
-        pixmap.setColor(240/255.0f, 128/255.0f, 0, 1.0f);
+        pixmap.setColor(240 / 255.0f, 128 / 255.0f, 0, 1.0f);
         pixmap.fill();
         backgroundTexture = new Texture(pixmap);
         pixmap.dispose();
@@ -69,11 +79,11 @@ public class mainMenuDP extends ScreenAdapter {
         yIndicator = 240.0f;
 
         TextureAtlas textureAtlas = gameManager.getInstance().getAssetManager().get("img/actors.pack", TextureAtlas.class);
-        indicator1 = new Image(new TextureRegion(textureAtlas.findRegion("MainMenuLogo"), 40,0,40,26));
+        indicator1 = new Image(new TextureRegion(textureAtlas.findRegion("MainMenuLogo"), 40, 0, 40, 26));
         indicator1.setSize(80.0f, 52.0f);
         indicator1.setPosition(xIndicator, yIndicator);
 
-        indicator2 = new Image(new TextureRegion(textureAtlas.findRegion("MainMenuLogo"),40,0,40,26));
+        indicator2 = new Image(new TextureRegion(textureAtlas.findRegion("MainMenuLogo"), 40, 0, 40, 26));
         indicator2.setSize(80.0f, 52.0f);
         indicator2.setPosition(xIndicator, yIndicator);
         indicator2.setVisible(false);
@@ -85,6 +95,9 @@ public class mainMenuDP extends ScreenAdapter {
         stage.addActor(background);
         stage.addActor(indicator);
         stage.addActor(title);
+        stage.addActor(easyLabel);
+        stage.addActor(normalLabel);
+        stage.addActor(hardLabel);
         stage.addActor(indicator1);
         stage.addActor(indicator2);
         currentSelection = 0;
@@ -93,7 +106,7 @@ public class mainMenuDP extends ScreenAdapter {
     }
 
     public void handleInput() {
-        if(!selected) {
+        if (!selected) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
                 currentSelection--;
                 gameManager.getInstance().playSound("Pickup.ogg");
@@ -165,13 +178,13 @@ public class mainMenuDP extends ScreenAdapter {
     }
 
     @Override
-    public void render(float delta) {
+    public void render(float f) {
         handleInput();
 
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        stage.act(delta);
+        stage.act(f);
         stage.draw();
     }
 
@@ -182,11 +195,16 @@ public class mainMenuDP extends ScreenAdapter {
 
     @Override
     public void hide() {
+        gameManager.getInstance().stopMusic();
         dispose();
     }
 
     @Override
     public void dispose() {
+        backgroundTexture.dispose();
+        indicatorTexture.dispose();
+        stage.dispose();
+        font.dispose();
     }
 
 }
