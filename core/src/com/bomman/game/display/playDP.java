@@ -7,10 +7,20 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.bomman.game.BGame;
 import com.bomman.game.game.gameManager;
@@ -22,6 +32,8 @@ public class playDP extends ScreenAdapter {
     private final BGame bGame;
     private final SpriteBatch batch;
     private FitViewport viewport;
+    private Stage stage;
+    private Stage stage2;
 
     private int mapWidth;
     private int mapHeight;
@@ -30,14 +42,17 @@ public class playDP extends ScreenAdapter {
     private final float WIDTH = 20;
     private final float HEIGHT = 15;
     private boolean pauseFlag;
+    private boolean changeScr;
+    private Skin skin;
 
-
+    private Window pauseWindow;
     private OrthographicCamera camera;
     private World box2DWorld;
     private com.artemis.World world;
 
     private Box2DDebugRenderer box2DRenderer;
     private boolean box2DRendererFlag;
+    private Texture fadeout;
 
 
     private hud Hud;
@@ -92,7 +107,45 @@ public class playDP extends ScreenAdapter {
                 gameManager.getInstance().playMusic("SuperBomberman-Boss.ogg", true);
                 break;
         }
+        changeScr = false;
+        stage = new Stage(viewport);
+        Pixmap pixmap = new Pixmap((int) WIDTH, (int) HEIGHT, Pixmap.Format.RGB888);
+        pixmap.setColor(0.2f, 0.2f, 0.2f, 1.0f);
+        pixmap.fill();
+        fadeout = new Texture(pixmap);
+        pixmap.dispose();
+        Image img = new Image(fadeout);
+        stage.addActor(img);
+        stage.addAction(Actions.fadeOut(0.5f));
         pauseFlag = false;
+
+        stage2 = new Stage(new FitViewport(640, 480), batch);
+        skin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
+        pauseWindow = new Window("Pause", skin);
+        pauseWindow.setPosition((640 - pauseWindow.getWidth()) / 2, (480 - pauseWindow.getHeight()) / 2);
+        pauseWindow.setVisible(pauseFlag);
+        TextButton continueButton = new TextButton("Continue", skin);
+        continueButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                pauseFlag = false;
+                gameManager.getInstance().playMusic();
+            }
+        });
+
+        TextButton exitButton = new TextButton("Exit", skin);
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent e, float x, float y) {
+                bGame.setScreen(new mainMenuDP(bGame));
+            }
+        });
+
+        pauseWindow.add(continueButton).padBottom(16.0f);
+        pauseWindow.row();
+        pauseWindow.add(exitButton);
+        stage2.addActor(pauseWindow);
+        Gdx.input.setInputProcessor(stage2);
     }
 
     public void render(float f) {
