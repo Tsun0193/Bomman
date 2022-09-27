@@ -27,7 +27,7 @@ public class mapBuilder {
                     0xff;
         }
 
-        boolean identicalColor(int color) {
+        boolean identical(int color) {
             return this.color == color;
         }
     }
@@ -65,6 +65,8 @@ public class mapBuilder {
         mapW = pixmap.getWidth();
         mapH = pixmap.getHeight();
     }
+
+    public void loadMap() {}
 
     public int getMapH() {
         return mapH;
