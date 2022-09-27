@@ -18,7 +18,7 @@ public class worldBuilder {
     }
 
     public void build() {
-        
+        mapBuilder mB = new mapBuilder(box2DWorld, world, 0);
     }
 
     public int getMapHeight() {
