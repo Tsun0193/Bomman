@@ -14,11 +14,15 @@ public class worldBuilder {
     public worldBuilder(World box2DWorld, com.artemis.World world) {
         this.box2DWorld = box2DWorld;
         this.world = world;
-        this.sprite = new Sprite();
     }
 
-    public void build() {
-        mapBuilder mB = new mapBuilder(box2DWorld, world, 0);
+    public void build(int lv) {
+        mapBuilder mB;
+        mB = new mapBuilder(box2DWorld, world, lv);
+        mB.loadMap();
+        sprite = mB.createSprite();
+        mapWidth = mB.getMapW();
+        mapHeight = mB.getMapH();
     }
 
     public int getMapHeight() {

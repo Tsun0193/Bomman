@@ -13,7 +13,7 @@ import com.badlogic.gdx.utils.Queue;
 public class gameManager implements Disposable {
     private final AssetManager assetManager;
     private static final gameManager instance = new gameManager();
-
+    public static final float PPM = 16.0f;
     /* TODO: Game Properties. */
     private static final int levels = 5;
     public static int enemiesLeft;
@@ -22,7 +22,7 @@ public class gameManager implements Disposable {
     private Queue<Entity> remoteBombQueue;
 
     public static final short NOTHING_BIT = 0;
-    public static final short INDESTRUCTIIBLE_BIT = 1;
+    public static final short INDESTRUCTABLE_BIT = 1;
     public static final short BREAKABLE_BIT = 1 << 1;
     public static final short PLAYER_BIT = 1 << 2;
     public static final short BOMB_BIT = 1 << 3;

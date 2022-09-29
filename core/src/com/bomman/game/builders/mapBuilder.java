@@ -5,18 +5,19 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.bomman.game.game.gameManager;
 
 public class mapBuilder {
     public static enum Block {
-        EMPTY(255,255,255),
-        WALL(0,0,0),
-        BREAKABLE(0,255,255),
-        INDESTRUCABLE(0,0,255),
-        PLAYER(255,0,0),
-        ENEMY1(0,255,0),
-        ENEMY2(0,128,0);
+        EMPTY(255, 255, 255),
+        WALL(0, 0, 0),
+        BREAKABLE(0, 255, 255),
+        INDESTRUCABLE(0, 0, 255),
+        PLAYER(255, 0, 0),
+        ENEMY1(0, 255, 0),
+        ENEMY2(0, 128, 0);
 
         int color;
 
@@ -31,6 +32,7 @@ public class mapBuilder {
             return this.color == color;
         }
     }
+
     protected final World box2DWorld;
     protected final com.artemis.World world;
     protected int level;
@@ -66,7 +68,22 @@ public class mapBuilder {
         mapH = pixmap.getHeight();
     }
 
-    public void loadMap() {}
+    public void loadMap() {
+        actorBuilder builder = actorBuilder.init(box2DWorld, world);
+        int colorCode;
+
+        for (int i = 0; i < mapH; i++){
+            for (int j = 0; j < mapW; j++) {
+                colorCode = pixmap.getPixel(j, mapH - i - 1);
+                if (Block.WALL.identical(colorCode)) {
+                    builder.createWall(j + 0.5f, i + 0.5f, mapW, mapH, tileTextureAtlas);
+                } else if (Block.INDESTRUCABLE.identical(colorCode)) {
+                    builder.createIndestructable(j + 0.5f, i + 0.5f, tileTextureAtlas);
+                }
+            }
+        }
+        gameManager.getInstance().setPlayerGoalPos(new Vector2(mapW / 2, mapH / 2));
+    }
 
     public int getMapH() {
         return mapH;
@@ -81,7 +98,7 @@ public class mapBuilder {
         Sprite sprite = new Sprite();
 
         sprite.setRegion(textureRegion);
-        sprite.setBounds(0,0,1,1);
+        sprite.setBounds(0, 0, 1, 1);
         return sprite;
     }
 }

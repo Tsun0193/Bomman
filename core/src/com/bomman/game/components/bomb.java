@@ -4,7 +4,7 @@ import com.artemis.Component;
 import com.bomman.game.game.gameManager;
 
 public class bomb extends Component {
-    public static short defaultMaskBits = gameManager.INDESTRUCTIIBLE_BIT |
+    public static short defaultMaskBits = gameManager.INDESTRUCTABLE_BIT |
             gameManager.BREAKABLE_BIT |
             gameManager.EXPLOSION_BIT;
     public enum State {
