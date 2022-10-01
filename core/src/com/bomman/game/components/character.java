@@ -17,11 +17,14 @@ public class character extends Component {
         special
     }
     public State state;
-
+    public static short defaultMaskBits = gameManager.INDESTRUCTABLE_BIT | gameManager.BREAKABLE_BIT | gameManager.ENEMY_BIT | gameManager.BOMB_BIT | gameManager.EXPLOSION_BIT | gameManager.POWERUP_BIT | gameManager.PORTAL_BIT;
+    public static short invincibleMaskBit = gameManager.INDESTRUCTABLE_BIT | gameManager.BREAKABLE_BIT | gameManager.POWERUP_BIT | gameManager.PORTAL_BIT;
     public float maxSpeed;
     public int hp;
     public int bombPower;
     public int bombCapacity;
+    public static final int MAX_BOMB_CAPACITY = 10;
+    public static final int MAX_BOMB_POWER = 6;
     public int bombRemaining;
     public float bombRegenerateTime;
 
