@@ -186,7 +186,7 @@ public class actorBuilder {
         Array<TextureRegion> keyFrames = new Array<>();
         List<String> stringList = Arrays.asList("walking_up", "walking_left", "walking_down", "walking_right",
                 "idle_up", "idle_left", "idle_down", "idle_right", "dying", "teleporting");
-        for(int i=0;i< stringList.size();i++) {
+        for (int i = 0; i < stringList.size(); i++) {
             createPlayerMovement(keyFrames, anima, textureRegion, animas, stringList, i);
         }
 
@@ -194,7 +194,7 @@ public class actorBuilder {
         Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
         Entity e = new EntityBuilder(world).with(
                 new character(resetPlayerAbilities),
-                new transform(x,y,1,1,0),
+                new transform(x, y, 1, 1, 0),
                 new rigidBody(body),
                 new state("idling_down"),
                 Renderer,
@@ -267,12 +267,58 @@ public class actorBuilder {
         Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
 
         Entity e = new EntityBuilder(world).with(
-                        new bomb(Character.bombPower, 2.0f),
-                        new transform(body.getPosition().x, body.getPosition().y, 1, 1, 0),
-                        new rigidBody(body),
+                new bomb(Character.bombPower, 2.0f),
+                new transform(body.getPosition().x, body.getPosition().y, 1, 1, 0),
+                new rigidBody(body),
+                new state("normal"),
+                Renderer,
+                new anima(animas)
+        ).build();
+
+        body.setUserData(e);
+    }
+
+    public void createPortal() {
+        float x = gameManager.getInstance().getPlayerGoalPos().x;
+        float y = gameManager.getInstance().getPlayerGoalPos().y;
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.KinematicBody;
+        bodyDef.position.set(x + 0.5f, y + 0.5f);
+
+        Body body = box2DWorld.createBody(bodyDef);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(0.2f, 0.2f);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.filter.categoryBits = gameManager.PORTAL_BIT;
+        fixtureDef.filter.maskBits = gameManager.PLAYER_BIT;
+        fixtureDef.isSensor = true;
+        body.createFixture(fixtureDef);
+
+        shape.dispose();
+
+        TextureRegion textureRegion = assetManager.get("img/actors.pack", TextureAtlas.class).findRegion("Items");
+        Array<TextureRegion> keyFrames = new Array<>();
+        for (int i = 6; i < 8; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 16));
+        }
+        Animation anima = new Animation(0.2f, keyFrames, Animation.PlayMode.LOOP);
+
+        HashMap<String, Animation> animas = new HashMap<>();
+        animas.put("normal", anima);
+
+        transform Transform = new transform(body.getPosition().x, body.getPosition().y, 1, 1, 0);
+        Transform.temp = 99;
+        renderer Renderer = new renderer(textureRegion, 16 / gameManager.PPM, 16 / gameManager.PPM);
+        Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
+
+        Entity e = new EntityBuilder(world).with(
+                        Transform,
                         new state("normal"),
-                        Renderer,
-                        new anima(animas)
+                        new anima(animas),
+                        Renderer
                 ).build();
 
         body.setUserData(e);
