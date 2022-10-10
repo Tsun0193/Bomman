@@ -8,16 +8,20 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.Queue;
+
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class gameManager implements Disposable {
+    public static boolean playerKickBomb;
+    public static boolean playerRemoteBomb;
     private final AssetManager assetManager;
     private static final gameManager instance = new gameManager();
     public static final float PPM = 16.0f;
     /* TODO: Game Properties. */
     private static final int levels = 5;
     public static int enemiesLeft;
-    private static boolean gameOver;
+    public static boolean gameOver;
     private static boolean gameFinished;
     private Queue<Entity> remoteBombQueue;
 
@@ -55,6 +59,8 @@ public class gameManager implements Disposable {
     private gameManager() {
         this.assetManager = new AssetManager();
         assetManager.load("img/actors.pack", TextureAtlas.class);
+
+        remoteBombQueue = new LinkedList<>();
 
         /* TODO: Load sounds. */
         loadSound(assetManager);

@@ -1,9 +1,13 @@
 package com.bomman.game.components;
 
 import com.artemis.Component;
+import com.badlogic.gdx.math.MathUtils;
 import com.bomman.game.game.gameManager;
 
 public class character extends Component {
+
+    public float acceleration;
+
     public enum State {
         dead,
         idleDown,
@@ -14,7 +18,7 @@ public class character extends Component {
         moveLeft,
         moveRight,
         moveUp,
-        special
+        teleport
     }
     public State state;
     public static short defaultMaskBits = gameManager.INDESTRUCTABLE_BIT | gameManager.BREAKABLE_BIT | gameManager.ENEMY_BIT | gameManager.BOMB_BIT | gameManager.EXPLOSION_BIT | gameManager.POWERUP_BIT | gameManager.PORTAL_BIT;
@@ -31,6 +35,8 @@ public class character extends Component {
     public float bombRegenerateTimeLeft;
 
     public boolean godmode;
+    public boolean kickBomb;
+    public boolean remoteBomb;
     public float godTimer;
     public int receivedDmg;
 
@@ -59,9 +65,69 @@ public class character extends Component {
         }
     }
 
-    public void addAmmo() {
-        this.bombCapacity++;
-        gameManager.playerBombCount = Math.max(bombCapacity, gameManager.playerBombCount);
+    public void powerUpAmmo() {
+        if (bombCapacity < MAX_BOMB_CAPACITY) {
+            bombCapacity++;
+            gameManager.playerBombCount = bombCapacity;
+        } else {
+            decreaseBombRegeneratingTime();
+        }
+
+        gameManager.getInstance().playSound("Powerup.ogg");
+    }
+
+    public void powerUpPower() {
+        if (bombPower < MAX_BOMB_POWER) {
+            gameManager.playerBombPow++;
+            bombPower = 1 + gameManager.playerBombPow;
+        } else {
+            decreaseBombRegeneratingTime();
+        }
+
+        gameManager.getInstance().playSound("Powerup.ogg");
+    }
+
+    public void powerUpSpeed() {
+        if (maxSpeed <= 8.0f) {
+            gameManager.playerMaxSpeed++;
+            maxSpeed = 3.0f + gameManager.playerMaxSpeed * 1.2f;
+        } else {
+            decreaseBombRegeneratingTime();
+        }
+
+        gameManager.getInstance().playSound("Powerup.ogg");
+    }
+
+    public void powerUpKick() {
+        if (!kickBomb) {
+            kickBomb = true;
+            gameManager.playerKickBomb = kickBomb;
+        } else {
+            decreaseBombRegeneratingTime();
+        }
+
+        gameManager.getInstance().playSound("Powerup.ogg");
+    }
+
+    public void powerUpRemote() {
+        if (!remoteBomb) {
+            remoteBomb = true;
+            gameManager.playerRemoteBomb = remoteBomb;
+        } else {
+            decreaseBombRegeneratingTime();
+        }
+
+        gameManager.getInstance().playSound("Powerup.ogg");
+    }
+
+    public void decreaseBombRegeneratingTime() {
+        if (bombRegenerateTime <= 0.2f) {
+            return;
+        }
+
+        bombRegenerateTime -= 0.2f;
+        gameManager.playerBombGenerateTime = bombRegenerateTime;
+        bombRegenerateTimeLeft = MathUtils.clamp(bombRegenerateTimeLeft, 0, bombRegenerateTime);
     }
 }
 

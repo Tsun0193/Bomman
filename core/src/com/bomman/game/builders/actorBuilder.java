@@ -323,4 +323,56 @@ public class actorBuilder {
 
         body.setUserData(e);
     }
+
+    public Entity createRemoteBomb(character Character, float x, float y) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.KinematicBody;
+        bodyDef.position.set(MathUtils.floor(x) + 0.5f, MathUtils.floor(y) + 0.5f);
+
+        Body body = box2DWorld.createBody(bodyDef);
+        PolygonShape polygonShape = new PolygonShape();
+        polygonShape.setAsBox(0.45f, 0.45f);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = polygonShape;
+        fixtureDef.filter.categoryBits = gameManager.BOMB_BIT;
+        fixtureDef.filter.maskBits = bomb.defaultMaskBits;
+        body.createFixture(fixtureDef);
+        polygonShape.dispose();
+
+        TextureAtlas textureAtlas = assetManager.get("img/actors.pack", TextureAtlas.class);
+        HashMap<String, Animation> animas = new HashMap<>();
+        TextureRegion textureRegion = textureAtlas.findRegion("Bomb");
+
+        Animation anima;
+        Array<TextureRegion> keyFrames = new Array<>();
+        if (Character.bombPower >= character.MAX_BOMB_POWER) {
+            for (int i = 3; i < 5; i++) {
+                keyFrames.add(new TextureRegion(textureRegion, i * 16, 16 * 1, 16, 16));
+            }
+        } else {
+            for (int i = 3; i < 5; i++) {
+                keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 16));
+            }
+        }
+        anima = new Animation(0.15f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
+        animas.put("normal", anima);
+
+        renderer Renderer = new renderer(new TextureRegion(textureRegion, 0, 0, 16, 16), 16 / gameManager.PPM, 16 / gameManager.PPM);
+        Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
+
+        // entity
+        Entity e = new EntityBuilder(world)
+                .with(
+                        new bomb(Character.bombPower, 16.0f),
+                        new transform(body.getPosition().x, body.getPosition().y, 1, 1, 0),
+                        new rigidBody(body),
+                        new state("normal"),
+                        Renderer,
+                        new anima(animas)
+                )
+                .build();
+
+        body.setUserData(e);
+        return e;
+    }
 }
