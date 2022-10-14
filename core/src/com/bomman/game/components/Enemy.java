@@ -4,7 +4,10 @@ import com.artemis.Component;
 import com.bomman.game.game.gameManager;
 
 public class Enemy extends Component {
-    public static short defaultMaskBits = gameManager.INDESTRUCTIIBLE_BIT | gameManager.BREAKABLE_BIT | gameManager.PLAYER_BIT | gameManager.EXPLOSION_BIT;
+    public static short defaultMaskBits = gameManager.INDESTRUCTABLE_BIT |
+            gameManager.BREAKABLE_BIT |
+            gameManager.PLAYER_BIT |
+            gameManager.EXPLOSION_BIT;
 
     public enum State {
         dead,
