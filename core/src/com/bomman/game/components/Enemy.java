@@ -60,6 +60,27 @@ public class Enemy extends Component {
 
         gameManager.enemiesLeft++;
     }
+
+    public void damage(int damage) {
+        hp -= damage;
+    }
+
+    public float getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(float speed) {
+        this.speed = speed;
+    }
+
+    public String getDieSound() {
+        return sound;
+    }
+
+    public void setDieSound(String dieSound) {
+        this.sound = dieSound;
+    }
+
 }
 
 

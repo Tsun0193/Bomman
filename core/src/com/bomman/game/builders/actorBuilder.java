@@ -378,4 +378,7 @@ public class actorBuilder {
 
     public void createExplosion(float x, float y, int power) {
     }
+
+    public void createPowerUp(float x, float y) {
+    }
 }
