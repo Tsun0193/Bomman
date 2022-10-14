@@ -67,7 +67,7 @@ public class playerSys extends IteratingSystem {
 
 
             if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-                if (Character.godmode || !hitBombVertical(body, fromV.set(body.getPosition()), toV.set(body.getPosition().x, body.getPosition().y + 0.5f))) {
+                if (Character.godmode || hitBombVertical(body, fromV.set(body.getPosition()), toV.set(body.getPosition().x, body.getPosition().y + 0.5f))) {
                     if (Math.abs(linearVelocity.y) < maxSpeed) {
                         body.applyLinearImpulse(new Vector2(0, Character.acceleration * body.getMass()), body.getWorldCenter(), true);
                     }
@@ -77,7 +77,7 @@ public class playerSys extends IteratingSystem {
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-                if (Character.godmode || !hitBombVertical(body, fromV.set(body.getPosition()), toV.set(body.getPosition().x, body.getPosition().y - 0.5f))) {
+                if (Character.godmode || hitBombVertical(body, fromV.set(body.getPosition()), toV.set(body.getPosition().x, body.getPosition().y - 0.5f))) {
                     if (Math.abs(linearVelocity.y) < maxSpeed) {
                         body.applyLinearImpulse(new Vector2(0, -Character.acceleration * body.getMass()), body.getWorldCenter(), true);
                     }
@@ -87,7 +87,7 @@ public class playerSys extends IteratingSystem {
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-                if (Character.godmode || !hitBombHorizontal(body, fromV.set(body.getPosition()), toV.set(body.getPosition().x - 0.5f, body.getPosition().y))) {
+                if (Character.godmode || hitBombHorizontal(body, fromV.set(body.getPosition()), toV.set(body.getPosition().x - 0.5f, body.getPosition().y))) {
                     if (Math.abs(linearVelocity.x) < maxSpeed) {
                         body.applyLinearImpulse(new Vector2(-Character.acceleration * body.getMass(), 0), body.getWorldCenter(), true);
                     }
@@ -97,7 +97,7 @@ public class playerSys extends IteratingSystem {
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-                if (Character.godmode || !hitBombHorizontal(body, fromV.set(body.getPosition()), toV.set(body.getPosition().x + 0.5f, body.getPosition().y))) {
+                if (Character.godmode || hitBombHorizontal(body, fromV.set(body.getPosition()), toV.set(body.getPosition().x + 0.5f, body.getPosition().y))) {
                     if (Math.abs(linearVelocity.x) < maxSpeed) {
                         body.applyLinearImpulse(new Vector2(Character.acceleration * body.getMass(), 0), body.getWorldCenter(), true);
                     }
@@ -329,7 +329,7 @@ public class playerSys extends IteratingSystem {
             Vector2 tmpV = new Vector2(toV);
             box2DWorld.rayCast(rayCastCallback, fromV, tmpV.add(0, (1 - i) * 0.4f));
         }
-        return hitting;
+        return !hitting;
     }
 
     protected boolean hitBombVertical(final Body body, Vector2 fromV, Vector2 toV) {
@@ -356,6 +356,6 @@ public class playerSys extends IteratingSystem {
             box2DWorld.rayCast(rayCastCallback, fromV, tmpV.add((1 - i) * 0.4f, 0));
 
         }
-        return hitting;
+        return !hitting;
     }
 }

@@ -375,4 +375,7 @@ public class actorBuilder {
         body.setUserData(e);
         return e;
     }
+
+    public void createExplosion(float x, float y, int power) {
+    }
 }

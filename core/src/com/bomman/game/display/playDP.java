@@ -2,6 +2,7 @@ package com.bomman.game.display;
 
 import com.artemis.BaseSystem;
 import com.artemis.WorldConfiguration;
+import com.artemis.WorldConfigurationBuilder;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -23,9 +25,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.bomman.game.BGame;
+import com.bomman.game.builders.worldBuilder;
 import com.bomman.game.game.gameManager;
 import com.bomman.game.gui.hud;
 import com.bomman.game.listeners.box2dListener;
+import com.bomman.game.sys.animaSys;
+import com.bomman.game.sys.bombSys;
+import com.bomman.game.sys.playerSys;
 import com.bomman.game.sys.renderSys;
 
 public class playDP extends ScreenAdapter {
@@ -53,6 +59,7 @@ public class playDP extends ScreenAdapter {
     private Box2DDebugRenderer box2DRenderer;
     private boolean box2DRendererFlag;
     private Texture fadeout;
+    private Sprite groundSprite;
 
 
     private hud Hud;
@@ -82,12 +89,31 @@ public class playDP extends ScreenAdapter {
         box2DWorld.setContactListener(new box2dListener());
         box2DRenderer = new Box2DDebugRenderer();
 
-        WorldConfiguration worldCfg = new WorldConfiguration();
+        WorldConfiguration worldCfg = new WorldConfigurationBuilder().with(
+                new playerSys(),
+                new bombSys(),
+//                new ExplosionSystem(),
+//                new PowerUpSystem(),
+//                new EnemySystem(),
+//                new BreakableSystem(),
+//                new PhysicsSystem(),
+//                new StateSystem(),
+                new animaSys(),
+                new renderSys(batch)
+//                new ParticleSystem(batch)
+        ).build();
         world = new com.artemis.World(worldCfg);
 
         gameManager.setEnemiesLeft(0);
         gameManager.setGameFinished(false);
         gameManager.setGameOver(false);
+
+        worldBuilder builder = new worldBuilder(box2DWorld, world);
+        builder.build(level);
+        groundSprite = builder.getSprite();
+
+        mapWidth = builder.getMapWidth();
+        mapHeight = builder.getMapHeight();
 
         Hud = new hud(batch, WIDTH, HEIGHT);
         Hud.setLevelInfo(level);
@@ -150,7 +176,7 @@ public class playDP extends ScreenAdapter {
 
     public void render(float f) {
         inputHandle();
-
+        screenHandle();
         Gdx.gl.glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -183,6 +209,45 @@ public class playDP extends ScreenAdapter {
 
         if (box2DRendererFlag) {
             box2DRenderer.render(box2DWorld, camera.combined);
+        }
+    }
+
+    private void screenHandle() {
+        if (gameManager.gameFinished && !changeScr) {
+            gameManager.getInstance().playSound("Teleport.ogg");
+            stage.addAction(Actions.addAction(
+                    Actions.sequence(
+                            Actions.delay(1.0f),
+                            Actions.fadeIn(1.0f),
+                            Actions.delay(1.0f),
+                            Actions.run(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (level >= gameManager.levels) {
+                                        bGame.setScreen(new endingDP(bGame));
+                                    } else {
+                                        bGame.setScreen(new playDP(bGame, level + 1));
+                                    }
+                                }
+                            })
+                    )));
+            changeScr = true;
+        }
+
+        if (gameManager.gameOver && !changeScr) {
+            stage.addAction(Actions.addAction(
+                    Actions.sequence(
+                            Actions.delay(1.0f),
+                            Actions.fadeIn(1.0f),
+                            Actions.delay(1.0f),
+                            Actions.run(new Runnable() {
+                                @Override
+                                public void run() {
+                                    bGame.setScreen(new finishDP(bGame));
+                                }
+                            })
+                    )));
+            changeScr = true;
         }
     }
 
