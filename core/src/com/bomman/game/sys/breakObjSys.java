@@ -33,7 +33,7 @@ public class breakObjSys extends IteratingSystem {
                     world.delete(entityId);
                     if (Math.random() < 0.2) {
                         actorBuilder builder = actorBuilder.init(body.getWorld(), world);
-                        builder.createPowerUp(body.getPosition().x, body.getPosition().y);
+                        builder.createBuff(body.getPosition().x, body.getPosition().y);
                     }
                 }
                 break;

@@ -292,5 +292,8 @@ public class playDP extends ScreenAdapter {
         box2DWorld.dispose();
         world.dispose();
         box2DRenderer.dispose();
+        stage.dispose();
+        fadeout.dispose();
+        Hud.dispose();
     }
 }

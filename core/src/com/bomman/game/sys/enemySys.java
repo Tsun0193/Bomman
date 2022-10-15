@@ -110,7 +110,7 @@ public class enemySys extends IteratingSystem {
 
                     if (Math.random() < 0.2) {
                         actorBuilder builder = actorBuilder.init(body.getWorld(), world);
-                        builder.createPowerUp(body.getPosition().x, body.getPosition().y);
+                        builder.createBuff(body.getPosition().x, body.getPosition().y);
                     }
 
                     body.getWorld().destroyBody(body);

@@ -25,6 +25,7 @@ public class actorBuilder {
     private AssetManager assetManager;
     private final Vector2 fromV = new Vector2();
     private final Vector2 toV = new Vector2();
+    private boolean explodeThrough;
 
     private actorBuilder() {
     }
@@ -91,7 +92,7 @@ public class actorBuilder {
         ).build();
     }
 
-    public void createIndestructable(float x, float y, TextureAtlas textureAtlas) {
+    public void createIndestructible(float x, float y, TextureAtlas textureAtlas) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(x, y);
@@ -182,52 +183,176 @@ public class actorBuilder {
         HashMap<String, Animation> animas = new HashMap<>();
         TextureAtlas textureAtlas = assetManager.get("img/actors.pack", TextureAtlas.class);
         TextureRegion textureRegion = textureAtlas.findRegion("Bomberman1");
-        Animation anima = null;
+        Animation anima;
+
         Array<TextureRegion> keyFrames = new Array<>();
-        List<String> stringList = Arrays.asList("walking_up", "walking_left", "walking_down", "walking_right",
-                "idle_up", "idle_left", "idle_down", "idle_right", "dying", "teleporting");
-        for (int i = 0; i < stringList.size(); i++) {
-            createPlayerMovement(keyFrames, anima, textureRegion, animas, stringList, i);
+        // walking up
+        for (int i = 0; i < 3; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
         }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP);
+        animas.put("walking_up", anima);
+
+        // walking left
+        keyFrames.clear();
+        for (int i = 3; i < 6; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP);
+        animas.put("walking_left", anima);
+
+        // walking down
+        keyFrames.clear();
+        for (int i = 6; i < 9; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP);
+        animas.put("walking_down", anima);
+
+        // walking right
+        keyFrames.clear();
+        for (int i = 9; i < 12; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP);
+        animas.put("walking_right", anima);
+
+        // idling up
+        keyFrames.clear();
+        keyFrames.add(new TextureRegion(textureRegion, 1 * 16, 0, 16, 24));
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        animas.put("idling_up", anima);
+
+        // idling left
+        keyFrames.clear();
+        keyFrames.add(new TextureRegion(textureRegion, 3 * 16, 0, 16, 24));
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        animas.put("idling_left", anima);
+
+        // idling down
+        keyFrames.clear();
+        keyFrames.add(new TextureRegion(textureRegion, 7 * 16, 0, 16, 24));
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        animas.put("idling_down", anima);
+
+        // idling right
+        keyFrames.clear();
+        keyFrames.add(new TextureRegion(textureRegion, 9 * 16, 0, 16, 24));
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        animas.put("idling_right", anima);
+
+        // dying
+        keyFrames.clear();
+        for (int i = 12; i < 18; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        animas.put("dying", anima);
+
+        // teleporting
+        keyFrames.clear();
+        keyFrames.add(new TextureRegion(textureRegion, 16 * 1, 0, 16, 24));
+        keyFrames.add(new TextureRegion(textureRegion, 16 * 3, 0, 16, 24));
+        keyFrames.add(new TextureRegion(textureRegion, 16 * 7, 0, 16, 24));
+        keyFrames.add(new TextureRegion(textureRegion, 16 * 9, 0, 16, 24));
+        anima = new Animation(0.05f, keyFrames, Animation.PlayMode.LOOP);
+        animas.put("teleporting", anima);
 
         renderer Renderer = new renderer(new TextureRegion(textureRegion, 0, 0, 16, 24), 16 / gameManager.PPM, 24 / gameManager.PPM);
         Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
+
+        // entity
+        Entity e = new com.artemis.utils.EntityBuilder(world)
+                .with(
+                        new character(resetPlayerAbilities),
+                        new transform(x, y, 1, 1, 0),
+                        new rigidBody(body),
+                        new state("idling_down"),
+                        Renderer,
+                        new anima(animas)
+                )
+                .build();
+
+        body.setUserData(e);
+    }
+
+    public void createOctopus(float x, float y) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.linearDamping = 12.0f;
+        bodyDef.position.set(x, y);
+
+        Body body = box2DWorld.createBody(bodyDef);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(radius);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.filter.categoryBits = gameManager.ENEMY_BIT;
+        fixtureDef.filter.maskBits = Enemy.defaultMaskBits;
+        body.createFixture(fixtureDef);
+
+        shape.dispose();
+
+        HashMap<String, Animation> animas = new HashMap<>();
+        TextureAtlas textureAtlas = assetManager.get("img/actors.pack", TextureAtlas.class);
+        TextureRegion textureRegion = textureAtlas.findRegion("Octopus");
+        Animation anima;
+
+        Array<TextureRegion> keyFrames = new Array<>();
+        // walking down
+        for (int i = 0; i < 4; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP);
+        animas.put("walking_down", anima);
+
+        keyFrames.clear();
+        // walking up
+        for (int i = 4; i < 8; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP);
+        animas.put("walking_up", anima);
+
+        keyFrames.clear();
+        // walking left
+        for (int i = 8; i < 12; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP);
+        animas.put("walking_left", anima);
+
+        keyFrames.clear();
+        // walking right
+        for (int i = 8; i < 12; i++) {
+            TextureRegion textureRegionRight = new TextureRegion(textureRegion, i * 16, 0, 16, 24);
+            textureRegionRight.flip(true, false);
+            keyFrames.add(textureRegionRight);
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP);
+        animas.put("walking_right", anima);
+
+        keyFrames.clear();
+        // dying
+        for (int i = 12; i < 16; i++) {
+            TextureRegion textureRegionRight = new TextureRegion(textureRegion, i * 16, 0, 16, 24);
+            keyFrames.add(textureRegionRight);
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        animas.put("dying", anima);
+
+        renderer Renderer = new renderer(new TextureRegion(textureRegion, 0, 0, 16, 24), 16 / gameManager.PPM, 24 / gameManager.PPM);
+        Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
+
         Entity e = new EntityBuilder(world).with(
-                new character(resetPlayerAbilities),
+                new Enemy(1, 0.8f),
                 new transform(x, y, 1, 1, 0),
                 new rigidBody(body),
-                new state("idling_down"),
+                new state("walking_down"),
                 Renderer,
                 new anima(animas)
         ).build();
         body.setUserData(e);
-    }
-
-    public void createPlayerMovement(Array<TextureRegion> keyFrames, Animation anima, TextureRegion textureRegion, HashMap<String, Animation> animas,
-                                     List<String> stringList, int id) {
-        keyFrames.clear();
-        if (id <= 3 || id == 8) {   //walking + dying
-            for (int i = id; i < id + 3; i++) {
-                keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
-            }
-            if (id == 8) {
-                anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
-            } else anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP);
-        } else if (id == 9) {       //teleporting
-            keyFrames.add(new TextureRegion(textureRegion, 16, 0, 16, 24));
-            keyFrames.add(new TextureRegion(textureRegion, 16 * 3, 0, 16, 24));
-            keyFrames.add(new TextureRegion(textureRegion, 16 * 7, 0, 16, 24));
-            keyFrames.add(new TextureRegion(textureRegion, 16 * 9, 0, 16, 24));
-            anima = new Animation(0.05f, keyFrames, Animation.PlayMode.LOOP);
-        } else {                    //idle
-            if (id == 4 || id == 5) {
-                keyFrames.add(new TextureRegion(textureRegion, (2 * id - 7) * 16, 0, 16, 24));
-            } else {
-                keyFrames.add(new TextureRegion(textureRegion, (2 * id - 5) * 16, 0, 16, 24));
-            }
-            anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
-        }
-        animas.put(stringList.get(id), anima);
     }
 
     public void createBomb(character Character, float x, float y) {
@@ -315,11 +440,11 @@ public class actorBuilder {
         Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
 
         Entity e = new EntityBuilder(world).with(
-                        Transform,
-                        new state("normal"),
-                        new anima(animas),
-                        Renderer
-                ).build();
+                Transform,
+                new state("normal"),
+                new anima(animas),
+                Renderer
+        ).build();
 
         body.setUserData(e);
     }
@@ -376,9 +501,661 @@ public class actorBuilder {
         return e;
     }
 
-    public void createExplosion(float x, float y, int power) {
+    public void createBombEnemy(float x, float y) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.linearDamping = 12.0f;
+        bodyDef.position.set(x, y);
+
+        Body body = box2DWorld.createBody(bodyDef);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(radius);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.filter.categoryBits = gameManager.ENEMY_BIT;
+        fixtureDef.filter.maskBits = Enemy.defaultMaskBits;
+        body.createFixture(fixtureDef);
+
+        shape.dispose();
+
+        HashMap<String, Animation> animas = new HashMap<>();
+        TextureAtlas textureAtlas = assetManager.get("img/actors.pack", TextureAtlas.class);
+        TextureRegion textureRegion = textureAtlas.findRegion("BombEnemy");
+        Animation anima;
+
+        Array<TextureRegion> keyFrames = new Array<>();
+        // walking down
+        for (int i = 0; i < 5; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
+        animas.put("walking_down", anima);
+
+        keyFrames.clear();
+        // walking up
+        for (int i = 0; i < 5; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 24, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
+        animas.put("walking_up", anima);
+
+        keyFrames.clear();
+        // walking left
+        for (int i = 0; i < 5; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 24 * 2, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
+        animas.put("walking_left", anima);
+
+        keyFrames.clear();
+        // walking right
+        for (int i = 0; i < 5; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 24 * 3, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
+        animas.put("walking_right", anima);
+
+        keyFrames.clear();
+        // dying
+        for (int i = 0; i < 1; i++) {
+            // no dying sprite
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 0, 0));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        animas.put("dying", anima);
+
+        keyFrames.clear();
+        // attacking (up)
+        for (int i = 0; i < 5; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 24 * 4, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
+        animas.put("attacking_up", anima);
+
+        renderer Renderer = new renderer(new TextureRegion(textureRegion, 0, 0, 16, 24), 16 / gameManager.PPM, 24 / gameManager.PPM);
+        Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
+
+        Entity e = new EntityBuilder(world).with(
+                new Enemy(1, 1.0f, "EnemyDie2.ogg", "bomb"),
+                new transform(x, y, 1, 1, 0),
+                new rigidBody(body),
+                new state("walking_down"),
+                Renderer,
+                new anima(animas)
+        ).build();
+        body.setUserData(e);
     }
 
-    public void createPowerUp(float x, float y) {
+    public void createSlime(float x, float y) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.linearDamping = 12.0f;
+        bodyDef.position.set(x, y);
+
+        Body body = box2DWorld.createBody(bodyDef);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(radius);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.filter.categoryBits = gameManager.ENEMY_BIT;
+        fixtureDef.filter.maskBits = Enemy.defaultMaskBits;
+        body.createFixture(fixtureDef);
+
+        shape.dispose();
+
+        // animation
+        HashMap<String, Animation> animas = new HashMap<>();
+        TextureAtlas textureAtlas = assetManager.get("img/actors.pack", TextureAtlas.class);
+        TextureRegion textureRegion = textureAtlas.findRegion("Slime");
+        Animation anima;
+
+        Array<TextureRegion> keyFrames = new Array<>();
+        // walking down
+        for (int i = 0; i < 6; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
+        animas.put("walking_down", anima);
+
+        keyFrames.clear();
+        // walking up
+        for (int i = 0; i < 6; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
+        animas.put("walking_up", anima);
+
+        keyFrames.clear();
+        // walking left
+        for (int i = 0; i < 6; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
+        animas.put("walking_left", anima);
+
+        keyFrames.clear();
+        // walking right
+        for (int i = 0; i < 6; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
+        animas.put("walking_right", anima);
+
+        keyFrames.clear();
+        // dying
+        for (int i = 6; i < 9; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        animas.put("dying", anima);
+
+        renderer Renderer = new renderer(new TextureRegion(textureRegion, 0, 0, 16, 24), 16 / gameManager.PPM, 24 / gameManager.PPM);
+        Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
+
+        Entity e = new EntityBuilder(world).with(
+                new Enemy(1, 1.2f, "EnemyDie1.ogg"),
+                new transform(x, y, 1, 1, 0),
+                new rigidBody(body),
+                new state("walking_down"),
+                Renderer,
+                new anima(animas)
+        ).build();
+        body.setUserData(e);
+    }
+
+    public void createHare(float x, float y) {
+        // box2d
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.linearDamping = 12.0f;
+        bodyDef.position.set(x, y);
+
+        Body body = box2DWorld.createBody(bodyDef);
+        CircleShape shape = new CircleShape();
+        shape.setRadius(radius);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.filter.categoryBits = gameManager.ENEMY_BIT;
+        fixtureDef.filter.maskBits = Enemy.defaultMaskBits;
+        body.createFixture(fixtureDef);
+
+        shape.dispose();
+
+        HashMap<String, Animation> animas = new HashMap<>();
+        TextureAtlas textureAtlas = assetManager.get("img/actors.pack", TextureAtlas.class);
+        TextureRegion textureRegion = textureAtlas.findRegion("Hare");
+        Animation anima;
+
+        Array<TextureRegion> keyFrames = new Array<>();
+        // walking down
+        for (int i = 0; i < 9; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP);
+        animas.put("walking_down", anima);
+
+        keyFrames.clear();
+        // walking up
+        for (int i = 0; i < 9; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 24, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP);
+        animas.put("walking_up", anima);
+
+        keyFrames.clear();
+        // walking left
+        for (int i = 0; i < 7; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 24 * 2, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP);
+        animas.put("walking_left", anima);
+
+        keyFrames.clear();
+        // walking right
+        for (int i = 0; i < 7; i++) {
+            TextureRegion walkingRight = new TextureRegion(textureRegion, i * 16, 24 * 2, 16, 24);
+            walkingRight.flip(true, false);
+            keyFrames.add(walkingRight);
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP);
+        animas.put("walking_right", anima);
+
+        keyFrames.clear();
+        // dying
+        for (int i = 7; i < 9; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 24 * 2, 16, 24));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        animas.put("dying", anima);
+
+        renderer Renderer = new renderer(new TextureRegion(textureRegion, 0, 0, 16, 24), 16 / gameManager.PPM, 24 / gameManager.PPM);
+        Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
+
+        Entity e = new EntityBuilder(world).with(
+                        new Enemy(1, 1.6f, "EnemyDie2.ogg"),
+                        new transform(x, y, 1, 1, 0),
+                        new rigidBody(body),
+                        new state("walking_down"),
+                        Renderer,
+                        new anima(animas)
+                )
+                .build();
+        body.setUserData(e);
+    }
+
+    public void createBoss1(float x, float y) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(x, y);
+        bodyDef.linearDamping = 12.0f;
+
+        Body body = box2DWorld.createBody(bodyDef);
+
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(1.2f);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = circleShape;
+        fixtureDef.filter.categoryBits = gameManager.ENEMY_BIT;
+        fixtureDef.filter.maskBits = gameManager.PLAYER_BIT | gameManager.EXPLOSION_BIT;
+        body.createFixture(fixtureDef);
+        circleShape.dispose();
+
+        HashMap<String, Animation> animas = new HashMap<>();
+        TextureAtlas textureAtlas = assetManager.get("img/actors.pack", TextureAtlas.class);
+        TextureRegion textureRegion = textureAtlas.findRegion("Boss1");
+        Animation anima;
+
+        Array<TextureRegion> keyFrames = new Array<>();
+        // walking up
+        for (int i = 0; i < 1; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 80, 0, 80, 160));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        animas.put("walking_up", anima);
+
+        keyFrames.clear();
+        // walking up
+        for (int i = 0; i < 1; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 80, 0, 80, 160));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        animas.put("walking_down", anima);
+
+        keyFrames.clear();
+        // walking left
+        for (int i = 0; i < 1; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 80, 0, 80, 160));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        animas.put("walking_left", anima);
+
+        keyFrames.clear();
+        // walking right
+        for (int i = 0; i < 1; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 80, 0, 80, 160));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        animas.put("walking_right", anima);
+
+        keyFrames.clear();
+        // dying
+        for (int i = 0; i < 1; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 80, 0, 80, 160));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        animas.put("dying", anima);
+
+        keyFrames.clear();
+        // damaged
+        for (int i = 4; i < 5; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 80, 0, 80, 160));
+        }
+        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        animas.put("damaged", anima);
+
+        keyFrames.clear();
+        // attacking down
+        for (int i = 1; i < 4; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 80, 0, 80, 160));
+        }
+        anima = new Animation(0.2f, keyFrames, Animation.PlayMode.NORMAL);
+        animas.put("attacking_down", anima);
+
+        renderer Renderer = new renderer(new TextureRegion(textureRegion, 0, 0, 80, 160), 80 / gameManager.PPM, 160 / gameManager.PPM);
+        Renderer.setSpriteOrigin(80 / gameManager.PPM / 2, 160 / gameManager.PPM / 2);
+
+        Entity e = new EntityBuilder(world).with(
+                new Enemy(8, 1.2f, "EnemyDie1.ogg", "boss1"),
+                new transform(x, y, 1, 1, 0),
+                new rigidBody(body),
+                new state("walking_down"),
+                Renderer,
+                new anima(animas)
+        ).build();
+
+        body.setUserData(e);
+
+    }
+
+    public void createBoss1Explosion(float x, float y) {
+        new EntityBuilder(world).with(
+                new particle("particles/boss1explode.particle", x, y)
+        ).build();
+    }
+
+    private boolean checkExplodeThrough(Vector2 fromV, Vector2 toV) {
+        explodeThrough = true;
+        RayCastCallback rayCastCallback = new RayCastCallback() {
+
+            @Override
+            public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+                if (fixture.getFilterData().categoryBits == gameManager.INDESTRUCTABLE_BIT) {
+                    explodeThrough = false;
+                    return 0;
+                }
+
+                if (fixture.getFilterData().categoryBits == gameManager.BREAKABLE_BIT) {
+                    explodeThrough = false;
+                    Entity e = (Entity) fixture.getBody().getUserData();
+                    breakableObj obj = e.getComponent(breakableObj.class);
+                    obj.state = breakableObj.State.explode;
+                    return 0;
+                }
+                return 0;
+            }
+        };
+        box2DWorld.rayCast(rayCastCallback, fromV, toV);
+        return explodeThrough;
+    }
+
+    public void createExplosion(float x, float y, int power) {
+        x = MathUtils.floor(x) + 0.5f;
+        y = MathUtils.floor(y) + 0.5f;
+
+        TextureRegion textureRegion = assetManager.get("img/actors.pack", TextureAtlas.class).findRegion("Explosion");
+        HashMap<String, Animation> animas = new HashMap<>();
+
+        Array<TextureRegion> keyFrames = new Array<>();
+        Animation anima;
+
+        // center
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(x, y);
+
+        Body explosionBody = box2DWorld.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(0.3f, 0.3f);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.filter.categoryBits = gameManager.EXPLOSION_BIT;
+        fixtureDef.filter.maskBits = explosion.defaultMaskBits;
+        fixtureDef.isSensor = true;
+        explosionBody.createFixture(fixtureDef);
+
+        for (int i = 0; i < 5; i++) {
+            keyFrames.add(new TextureRegion(textureRegion, i * 16, 16, 16, 16));
+        }
+        anima = new Animation(0.15f, keyFrames, Animation.PlayMode.NORMAL);
+        animas.put("exploding", anima);
+
+        renderer Renderer = new renderer(textureRegion, 1, 1);
+        Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
+
+        Entity e = new EntityBuilder(world).with(
+                new explosion(),
+                new transform(x, y, 1, 1, 0),
+                new rigidBody(explosionBody),
+                new state("exploding"),
+                new anima(animas),
+                Renderer
+        ).build();
+        explosionBody.setUserData(e);
+
+        // up
+        for (int i = 0; i < power; i++) {
+            if (!checkExplodeThrough(fromV.set(x, y + i), toV.set(x, y + i + 1))) {
+                break;
+            }
+
+            // box2d
+            bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+            bodyDef.position.set(x, y + i + 1);
+            explosionBody = box2DWorld.createBody(bodyDef);
+            fixtureDef = new FixtureDef();
+            fixtureDef.shape = shape;
+            fixtureDef.filter.categoryBits = gameManager.EXPLOSION_BIT;
+            fixtureDef.filter.maskBits = explosion.defaultMaskBits;
+            fixtureDef.isSensor = true;
+            explosionBody.createFixture(fixtureDef);
+
+            keyFrames.clear();
+            animas = new HashMap<>();
+
+            for (int j = 0; j < 5; j++) {
+                if (i + 1 == power) {
+                    keyFrames.add(new TextureRegion(textureRegion, j * 16, 0, 16, 16));
+
+                } else {
+                    keyFrames.add(new TextureRegion(textureRegion, j * 16, 16 * 2, 16, 16));
+                }
+            }
+            anima = new Animation(0.15f, keyFrames, Animation.PlayMode.NORMAL);
+            animas.put("exploding", anima);
+
+            Renderer = new renderer(textureRegion, 1, 1);
+            Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
+
+            new EntityBuilder(world).with(
+                    new explosion(),
+                    new transform(x, y + i + 1, 1, 1, 0),
+                    new rigidBody(explosionBody),
+                    new state("exploding"),
+                    new anima(animas),
+                    Renderer
+            ).build();
+
+            explosionBody.setUserData(e);
+        }
+
+        // down
+        for (int i = 0; i < power; i++) {
+            if (!checkExplodeThrough(fromV.set(x, y - i), toV.set(x, y - i - 1))) {
+                break;
+            }
+
+            // box2d
+            bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+            bodyDef.position.set(x, y - i - 1);
+            explosionBody = box2DWorld.createBody(bodyDef);
+            fixtureDef = new FixtureDef();
+            fixtureDef.shape = shape;
+            fixtureDef.filter.categoryBits = gameManager.EXPLOSION_BIT;
+            fixtureDef.filter.maskBits = explosion.defaultMaskBits;
+            fixtureDef.isSensor = true;
+            explosionBody.createFixture(fixtureDef);
+
+            keyFrames.clear();
+            animas = new HashMap<>();
+
+            for (int j = 0; j < 5; j++) {
+                if (i + 1 == power) {
+                    keyFrames.add(new TextureRegion(textureRegion, j * 16, 16 * 3, 16, 16));
+
+                } else {
+                    keyFrames.add(new TextureRegion(textureRegion, j * 16, 16 * 2, 16, 16));
+                }
+            }
+            anima = new Animation(0.15f, keyFrames, Animation.PlayMode.NORMAL);
+            animas.put("exploding", anima);
+
+            Renderer = new renderer(textureRegion, 1, 1);
+            Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
+
+            new EntityBuilder(world).with(
+                    new explosion(),
+                    new transform(x, y - i - 1, 1, 1, 0),
+                    new rigidBody(explosionBody),
+                    new state("exploding"),
+                    new anima(animas),
+                    Renderer
+            ).build();
+            explosionBody.setUserData(e);
+        }
+
+        // left
+        for (int i = 0; i < power; i++) {
+            if (!checkExplodeThrough(fromV.set(x - i, y), toV.set(x - i - 1, y))) {
+                break;
+            }
+
+            // box2d
+            bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+            bodyDef.position.set(x - i - 1, y);
+            explosionBody = box2DWorld.createBody(bodyDef);
+            fixtureDef = new FixtureDef();
+            fixtureDef.shape = shape;
+            fixtureDef.filter.categoryBits = gameManager.EXPLOSION_BIT;
+            fixtureDef.filter.maskBits = explosion.defaultMaskBits;
+            fixtureDef.isSensor = true;
+            explosionBody.createFixture(fixtureDef);
+
+            keyFrames.clear();
+            animas = new HashMap<>();
+
+            for (int j = 0; j < 5; j++) {
+                if (i + 1 == power) {
+                    keyFrames.add(new TextureRegion(textureRegion, j * 16, 16 * 6, 16, 16));
+
+                } else {
+                    keyFrames.add(new TextureRegion(textureRegion, j * 16, 16 * 4, 16, 16));
+                }
+            }
+            anima = new Animation(0.15f, keyFrames, Animation.PlayMode.NORMAL);
+            animas.put("exploding", anima);
+
+            Renderer = new renderer(textureRegion, 1, 1);
+            Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
+
+            new EntityBuilder(world).with(
+                    new explosion(),
+                    new transform(x - i - 1, y, 1, 1, 0),
+                    new rigidBody(explosionBody),
+                    new state("exploding"),
+                    new anima(animas),
+                    Renderer
+            ).build();
+
+            explosionBody.setUserData(e);
+        }
+
+        // right
+        for (int i = 0; i < power; i++) {
+            if (!checkExplodeThrough(fromV.set(x + i, y), toV.set(x + i + 1, y))) {
+                break;
+            }
+
+            // box2d
+            bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+            bodyDef.position.set(x + i + 1, y);
+            explosionBody = box2DWorld.createBody(bodyDef);
+            fixtureDef = new FixtureDef();
+            fixtureDef.shape = shape;
+            fixtureDef.filter.categoryBits = gameManager.EXPLOSION_BIT;
+            fixtureDef.filter.maskBits = explosion.defaultMaskBits;
+            fixtureDef.isSensor = true;
+            explosionBody.createFixture(fixtureDef);
+
+            keyFrames.clear();
+            animas = new HashMap<>();
+
+            for (int j = 0; j < 5; j++) {
+                if (i + 1 == power) {
+                    keyFrames.add(new TextureRegion(textureRegion, j * 16, 16 * 5, 16, 16));
+
+                } else {
+                    keyFrames.add(new TextureRegion(textureRegion, j * 16, 16 * 4, 16, 16));
+                }
+            }
+            anima = new Animation(0.15f, keyFrames, Animation.PlayMode.NORMAL);
+            animas.put("exploding", anima);
+
+            Renderer = new renderer(textureRegion, 1, 1);
+            Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
+
+            new EntityBuilder(world).with(
+                    new explosion(),
+                    new transform(x + i + 1, y, 1, 1, 0),
+                    new rigidBody(explosionBody),
+                    new state("exploding"),
+                    new anima(animas),
+                    Renderer
+            ).build();
+
+            explosionBody.setUserData(e);
+        }
+
+        shape.dispose();
+    }
+
+    public void createBuff(float x, float y) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(MathUtils.floor(x) + 0.5f, MathUtils.floor(y) + 0.5f);
+
+        Body body = box2DWorld.createBody(bodyDef);
+
+        PolygonShape polygonShape = new PolygonShape();
+        polygonShape.setAsBox(0.4f, 0.4f);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = polygonShape;
+        fixtureDef.filter.categoryBits = gameManager.POWERUP_BIT;
+        fixtureDef.filter.maskBits = gameManager.PLAYER_BIT;
+        fixtureDef.isSensor = true;
+        body.createFixture(fixtureDef);
+
+        buff Buff = new buff();
+        int i;
+        switch (Buff.type) {
+            case ONE_UP:
+                i = 5;
+                break;
+            case REMOTE:
+                i = 4;
+                break;
+            case KICK:
+                i = 3;
+                break;
+            case SPEED:
+                i = 2;
+                break;
+            case POWER:
+                i = 1;
+                break;
+            case AMMO:
+            default:
+                i = 0;
+                break;
+
+        }
+
+        TextureAtlas textureAtlas = assetManager.get("img/actors.pack", TextureAtlas.class);
+        renderer Renderer = new renderer(new TextureRegion(textureAtlas.findRegion("Items"), i * 16, 0, 16, 16), 16 / gameManager.PPM, 16 / gameManager.PPM);
+        Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
+
+        Entity e = new EntityBuilder(world).with(
+                Buff,
+                new rigidBody(body),
+                new transform(body.getPosition().x, body.getPosition().y, 1, 1, 0),
+                new state("normal"),
+                Renderer
+        ).build();
+
+        body.setUserData(e);
+        polygonShape.dispose();
     }
 }
