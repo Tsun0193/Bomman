@@ -91,14 +91,14 @@ public class playDP extends ScreenAdapter {
                 new playerSys(),
                 new bombSys(),
                 new explosionSys(),
-//                new PowerUpSystem(),
+                new buffSys(),
                 new enemySys(),
-//                new BreakableSystem(),
-//                new PhysicsSystem(),
-//                new StateSystem(),
+                new breakObjSys(),
+                new physicsSys(),
+                new stateSys(),
                 new animaSys(),
-                new renderSys(batch)
-//                new ParticleSystem(batch)
+                new renderSys(batch),
+                new particleSys(batch)
         ).build();
         world = new com.artemis.World(worldCfg);
 
