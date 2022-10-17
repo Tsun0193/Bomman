@@ -19,7 +19,7 @@ public class mapBuilder {
         ENEMY1(0, 255, 0),
         ENEMY2(0, 128, 0);
 
-        int color;
+        final int color;
 
         Block(int red, int green, int blue) {
             color = red << 24 |
@@ -72,17 +72,56 @@ public class mapBuilder {
         actorBuilder builder = actorBuilder.init(box2DWorld, world);
         int colorCode;
 
-        for (int i = 0; i < mapH; i++){
+        for (int i = 0; i < mapH; i++) {
             for (int j = 0; j < mapW; j++) {
                 colorCode = pixmap.getPixel(j, mapH - i - 1);
                 if (Block.WALL.identical(colorCode)) {
                     builder.createWall(j + 0.5f, i + 0.5f, mapW, mapH, tileTextureAtlas);
+                } else if (Block.BREAKABLE.identical(colorCode)) {
+                    builder.createBreakableObj(j + 0.5f, i + 0.5f, tileTextureAtlas);
                 } else if (Block.INDESTRUCABLE.identical(colorCode)) {
-                    builder.createIndestructable(j + 0.5f, i + 0.5f, tileTextureAtlas);
+                    builder.createIndestructible(j + 0.5f, i + 0.5f, tileTextureAtlas);
+                } else if (Block.PLAYER.identical(colorCode)) {
+                    builder.createPlayer(j + 0.5f, i + 0.5f, false);
+                    gameManager.getInstance().setPlayerResPos(new Vector2(j + 0.5f, i + 0.5f));
+                } else if (Block.ENEMY1.identical(colorCode)) {
+                    switch (level) {
+                        case 5:
+                            builder.createBoss1(j + 0.5f, i + 0.5f);
+                            break;
+                        case 4:
+                            builder.createBombEnemy(j + 0.5f, i + 0.5f);
+                            break;
+                        case 3:
+                            builder.createHare(j + 0.5f, i + 0.5f);
+                            break;
+                        case 1:
+                        default:
+                            builder.createOctopus(j + 0.5f, i + 0.5f);
+                            break;
+                    }
+                } else if (Block.ENEMY2.identical(colorCode)) {
+                    switch (level) {
+                        case 5:
+                            break;
+                        case 4:
+                            builder.createHare(j + 0.5f, i + 0.5f);
+                            break;
+                        case 3:
+                            builder.createHare(j + 0.5f, i + 0.5f);
+                            break;
+                        case 2:
+                            builder.createSlime(j + 0.5f, i + 0.5f);
+                            break;
+                        case 1:
+                        default:
+                            builder.createOctopus(j + 0.5f, i + 0.5f);
+                            break;
+                    }
                 }
             }
+            gameManager.getInstance().setPlayerGoalPos(new Vector2(mapW / 2, mapH / 2));
         }
-        gameManager.getInstance().setPlayerGoalPos(new Vector2(mapW / 2, mapH / 2));
     }
 
     public int getMapH() {

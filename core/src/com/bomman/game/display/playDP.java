@@ -29,10 +29,7 @@ import com.bomman.game.builders.worldBuilder;
 import com.bomman.game.game.gameManager;
 import com.bomman.game.gui.hud;
 import com.bomman.game.listeners.box2dListener;
-import com.bomman.game.sys.animaSys;
-import com.bomman.game.sys.bombSys;
-import com.bomman.game.sys.playerSys;
-import com.bomman.game.sys.renderSys;
+import com.bomman.game.sys.*;
 
 public class playDP extends ScreenAdapter {
     private final BGame bGame;
@@ -80,6 +77,7 @@ public class playDP extends ScreenAdapter {
     /**
      * Main Function for Playing Display.
      */
+    @Override
     public void show() {
         camera = new OrthographicCamera();
         viewport = new FitViewport(WIDTH, HEIGHT, camera);
@@ -92,15 +90,15 @@ public class playDP extends ScreenAdapter {
         WorldConfiguration worldCfg = new WorldConfigurationBuilder().with(
                 new playerSys(),
                 new bombSys(),
-//                new ExplosionSystem(),
-//                new PowerUpSystem(),
-//                new EnemySystem(),
-//                new BreakableSystem(),
-//                new PhysicsSystem(),
-//                new StateSystem(),
+                new explosionSys(),
+                new buffSys(),
+                new enemySys(),
+                new breakObjSys(),
+                new physicsSys(),
+                new stateSys(),
                 new animaSys(),
-                new renderSys(batch)
-//                new ParticleSystem(batch)
+                new renderSys(batch),
+                new particleSys(batch)
         ).build();
         world = new com.artemis.World(worldCfg);
 
@@ -182,6 +180,12 @@ public class playDP extends ScreenAdapter {
 
         batch.setProjectionMatrix(camera.combined);
         batch.begin();
+        for (int i = 0; i < mapHeight; i++) {
+            for (int j = 0; j < mapWidth; j++) {
+                groundSprite.setPosition(j, i);
+                groundSprite.draw(batch);
+            }
+        }
         batch.end();
 
         if (!pauseFlag) {
@@ -206,6 +210,12 @@ public class playDP extends ScreenAdapter {
         world.process();
 
         Hud.draw(f);
+
+        stage.draw();
+        stage.act(f);
+
+        pauseWindow.setVisible(pauseFlag);
+        stage2.draw();
 
         if (box2DRendererFlag) {
             box2DRenderer.render(box2DWorld, camera.combined);
@@ -282,5 +292,8 @@ public class playDP extends ScreenAdapter {
         box2DWorld.dispose();
         world.dispose();
         box2DRenderer.dispose();
+        stage.dispose();
+        fadeout.dispose();
+        Hud.dispose();
     }
 }
