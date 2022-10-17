@@ -13,29 +13,58 @@ import com.badlogic.gdx.utils.Array;
 import com.bomman.game.components.*;
 import com.bomman.game.game.gameManager;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 public class actorBuilder {
+    /**
+     * Declare variables.
+     */
     private static final actorBuilder instance = new actorBuilder();
     protected final float radius = 0.45f;
-    private World box2DWorld;
-    private com.artemis.World world;
+    /**
+     * 2 World song song cung hoat dong, moi cai xu ly mot phan rieng.
+     */
+    private World box2DWorld; //Xu li tuong tac vat ly, a.k.a. Mechanics.
+    private com.artemis.World world; //Xu li entities,  a.k.a Controllers.
     private AssetManager assetManager;
     private final Vector2 fromV = new Vector2();
     private final Vector2 toV = new Vector2();
     private boolean explodeThrough;
 
+    /**
+     * Default Constructor.
+     */
     private actorBuilder() {
+        //Do nothing.
     }
 
+    /**
+     * Initializing actors: Asset Manager, World.
+     * @param box2DWorld mechanical world
+     * @param world controlling systems
+     * @return instance (actorBuilder)
+     */
     public static actorBuilder init(World box2DWorld, com.artemis.World world) {
         instance.box2DWorld = box2DWorld;
         instance.assetManager = gameManager.getInstance().getAssetManager();
         instance.world = world;
         return instance;
     }
+
+    /**
+     * Below are creating components methods.
+     * <p>
+     * In common, bodyDef = component body definitions: set types and set coordinates.
+     * shape = shaped frame for fixture.
+     * fixtureDef = object created with aforementioned shape.
+     * Last step is to render the above fixture into world (controller).
+     * </p>
+     * <p>
+     * P/s:
+     * categoryBits -> categorizing which type of bit that is.
+     * maskBits -> selecting which type of bit can collide with.
+     * </p>
+     */
 
     public void createWall(float x, float y, float mapW, float mapH, TextureAtlas textureAtlas) {
         BodyDef bodyDef = new BodyDef();
@@ -92,6 +121,9 @@ public class actorBuilder {
         ).build();
     }
 
+    /**
+     * Always dispose unused variables to optimize application's execution.
+     */
     public void createIndestructible(float x, float y, TextureAtlas textureAtlas) {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -115,6 +147,21 @@ public class actorBuilder {
                 Renderer
         ).build();
     }
+
+    /**
+     * <p>
+     *     New types of Creation - Unstable
+     * </p>
+     * <p>
+     *     Hashmap of Animations to make objects moving, including states.
+     * </p>
+     * <p>
+     *     TextureAtlas - Album, providing a way to manage textures.
+     *     While keyframes actually just indexes of pics, mainly used for creating smooth movement.
+     * </p>
+     * <p></p>
+     * Lastly, set user data (entity) into body.
+     */
 
     public void createBreakableObj(float x, float y, TextureAtlas textureAtlas) {
         BodyDef bodyDef = new BodyDef();
@@ -843,6 +890,17 @@ public class actorBuilder {
         ).build();
     }
 
+    /**
+     * <p>
+     *     The RayCastCallback interface is used to write code that gets executed when your ray hits a Fixture.
+     * </p>
+     * <p>
+     *     Ray - invisible & imaginary line to check what it intersects with.
+     * </p>
+     * <p>
+     *     e.g. : The Ray hit the fixture, while it can explode through -> continue impacting others on its way.
+     * </p>
+     */
     private boolean checkExplodeThrough(Vector2 fromV, Vector2 toV) {
         explodeThrough = true;
         RayCastCallback rayCastCallback = new RayCastCallback() {
@@ -868,6 +926,12 @@ public class actorBuilder {
         return explodeThrough;
     }
 
+    /**
+     * Creating animations for explosions, and make contact (set objects destructed) with other objects.
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param power affect range.
+     */
     public void createExplosion(float x, float y, int power) {
         x = MathUtils.floor(x) + 0.5f;
         y = MathUtils.floor(y) + 0.5f;
