@@ -11,11 +11,20 @@ public class worldBuilder {
     private int mapWidth;
     private int mapHeight;
 
+    /**
+     * Constructor.
+     * @param box2DWorld Mechanics
+     * @param world Controller
+     */
     public worldBuilder(World box2DWorld, com.artemis.World world) {
         this.box2DWorld = box2DWorld;
         this.world = world;
     }
 
+    /**
+     * Creating Builder + Load Map.
+     * @param lv level
+     */
     public void build(int lv) {
         mapBuilder mB;
         mB = new mapBuilder(box2DWorld, world, lv);
@@ -25,6 +34,11 @@ public class worldBuilder {
         mapHeight = mB.getMapH();
     }
 
+    /**
+     * <p>
+     *     Getters.
+     * </p>
+     */
     public int getMapHeight() {
         return mapHeight;
     }
