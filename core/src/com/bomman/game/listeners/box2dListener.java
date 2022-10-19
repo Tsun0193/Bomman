@@ -2,10 +2,7 @@ package com.bomman.game.listeners;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.physics.box2d.*;
-import com.bomman.game.components.Enemy;
-import com.bomman.game.components.bomb;
-import com.bomman.game.components.breakableObj;
-import com.bomman.game.components.character;
+import com.bomman.game.components.*;
 import com.bomman.game.game.gameManager;
 
 public class box2dListener implements ContactListener {
@@ -47,6 +44,81 @@ public class box2dListener implements ContactListener {
                 Entity e = (Entity) fixtureB.getBody().getUserData();
                 breakableObj obj = e.getComponent(breakableObj.class);
                 obj.state = breakableObj.State.explode;
+            }
+        }
+        else if (fixtureA.getFilterData().categoryBits == gameManager.ENEMY_BIT || fixtureB.getFilterData().categoryBits == gameManager.ENEMY_BIT) {
+            if (fixtureA.getFilterData().categoryBits == gameManager.PLAYER_BIT) {
+                Entity e = (Entity) fixtureA.getBody().getUserData();
+                character player = e.getComponent(character.class);
+                player.damage(1);
+            } else if (fixtureB.getFilterData().categoryBits == gameManager.PLAYER_BIT) {
+                Entity e = (Entity) fixtureB.getBody().getUserData();
+                character player = e.getComponent(character.class);
+                player.damage(1);
+            }
+        }
+        else if (fixtureA.getFilterData().categoryBits == gameManager.PLAYER_BIT || fixtureB.getFilterData().categoryBits == gameManager.PLAYER_BIT) {
+            if (fixtureA.getFilterData().categoryBits == gameManager.POWERUP_BIT) {
+                Entity entity = (Entity) fixtureA.getBody().getUserData();
+                buff Buff = entity.getComponent(buff.class);
+                Buff.life = 0;
+                Entity playerEntity = (Entity) fixtureB.getBody().getUserData();
+                character player = playerEntity.getComponent(character.class);
+                switch (Buff.type) {
+                    case ONE_UP:
+                        gameManager.getInstance().addLive();
+                        break;
+                    case REMOTE:
+                        player.powerUpRemote();
+                        break;
+                    case KICK:
+                        player.powerUpKick();
+                        break;
+                    case SPEED:
+                        player.powerUpSpeed();
+                        break;
+                    case POWER:
+                        player.powerUpPower();
+                        break;
+                    case AMMO:
+                    default:
+                        player.powerUpAmmo();
+                        break;
+                }
+            } else if (fixtureB.getFilterData().categoryBits == gameManager.POWERUP_BIT) {
+                Entity entity = (Entity) fixtureB.getBody().getUserData();
+                buff Buff = entity.getComponent(buff.class);
+                Buff.life = 0;
+                Entity playerEntity = (Entity) fixtureA.getBody().getUserData();
+                character player = playerEntity.getComponent(character.class);
+                switch (Buff.type) {
+                    case REMOTE:
+                        player.powerUpRemote();
+                        break;
+                    case KICK:
+                        player.powerUpKick();
+                        break;
+                    case SPEED:
+                        player.powerUpSpeed();
+                        break;
+                    case POWER:
+                        player.powerUpPower();
+                        break;
+                    case AMMO:
+                    default:
+                        player.powerUpAmmo();
+                        break;
+                }
+            } else if (fixtureA.getFilterData().categoryBits == gameManager.PORTAL_BIT) {
+                gameManager.gameFinished = true;
+                Entity playerEntity = (Entity) fixtureB.getBody().getUserData();
+                character player = playerEntity.getComponent(character.class);
+                player.state = character.State.teleport;
+            } else if (fixtureB.getFilterData().categoryBits == gameManager.PORTAL_BIT) {
+                gameManager.gameFinished = true;
+                Entity playerEntity = (Entity) fixtureA.getBody().getUserData();
+                character player = playerEntity.getComponent(character.class);
+                player.state = character.State.teleport;
             }
         }
     }
