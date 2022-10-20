@@ -37,7 +37,6 @@ public class mainMenuDP extends ScreenAdapter {
     private float yIndicator;
     private Image indicator1;
     private Image indicator2;
-    private Image indicator;
 
     public mainMenuDP(BGame bGame) {
         this.bGame = bGame;
@@ -89,7 +88,7 @@ public class mainMenuDP extends ScreenAdapter {
         indicator2.setVisible(false);
 
         indicatorTexture = new Texture("img/indications.png");
-        indicator = new Image(indicatorTexture);
+        Image indicator = new Image(indicatorTexture);
         indicator.setPosition(640.0f - indicator.getWidth() - 12.0f, 12.0f);
 
         stage.addActor(background);
@@ -106,74 +105,72 @@ public class mainMenuDP extends ScreenAdapter {
     }
 
     public void handleInput() {
-        if (!selected) {
-            if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
-                currentSelection--;
-                gameManager.getInstance().playSound("Pickup.ogg");
+        if (!selected && Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+            currentSelection--;
+            gameManager.getInstance().playSound("Pickup.ogg");
 
-                if (currentSelection < 0) {
-                    currentSelection += 3;
-                }
-
-                float yIndicator2 = yIndicator - currentSelection * 60.0f;
-
-                MoveToAction action = new MoveToAction();
-                action.setPosition(xIndicator, yIndicator2);
-                action.setDuration(0.2f);
-                indicator1.clearActions();
-                indicator1.addAction(action);
-                indicator2.setPosition(xIndicator, yIndicator2);
+            if (currentSelection < 0) {
+                currentSelection += 3;
             }
 
-            if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
-                currentSelection++;
-                gameManager.getInstance().playSound("Pickup.ogg");
+            float yIndicator2 = yIndicator - currentSelection * 60.0f;
 
-                if (currentSelection >= 3) {
-                    currentSelection -= 3;
-                }
+            MoveToAction action = new MoveToAction();
+            action.setPosition(xIndicator, yIndicator2);
+            action.setDuration(0.2f);
+            indicator1.clearActions();
+            indicator1.addAction(action);
+            indicator2.setPosition(xIndicator, yIndicator2);
+        }
 
-                float yIndicator2 = yIndicator - currentSelection * 60.f;
+        if (!selected && Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+            currentSelection++;
+            gameManager.getInstance().playSound("Pickup.ogg");
 
-                MoveToAction action = new MoveToAction();
-                action.setPosition(xIndicator, yIndicator2);
-                action.setDuration(0.2f);
-                indicator1.clearActions();
-                indicator1.addAction(action);
-                indicator2.setPosition(xIndicator, yIndicator2);
+            if (currentSelection >= 3) {
+                currentSelection -= 3;
             }
 
-            if (Gdx.input.isKeyJustPressed(Input.Keys.X) || Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
-                gameManager.getInstance().playSound("Teleport.ogg");
+            float yIndicator2 = yIndicator - currentSelection * 60.f;
 
-                selected = true;
+            MoveToAction action = new MoveToAction();
+            action.setPosition(xIndicator, yIndicator2);
+            action.setDuration(0.2f);
+            indicator1.clearActions();
+            indicator1.addAction(action);
+            indicator2.setPosition(xIndicator, yIndicator2);
+        }
 
-                indicator1.setVisible(false);
-                indicator2.setVisible(true);
+        if (!selected && Gdx.input.isKeyJustPressed(Input.Keys.X) || Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
+            gameManager.getInstance().playSound("Teleport.ogg");
 
-                RunnableAction action = new RunnableAction();
-                action.setRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        switch (currentSelection) {
-                            case 0:
-                            case 1:
-                                gameManager.difficultyRespawn(true, true);
-                                break;
-                            case 2:
-                                gameManager.difficultyRespawn(false, true);
-                                break;
-                            default:
-                                gameManager.difficultyRespawn(true, false);
-                                break;
-                        }
-                        gameManager.playerLives = 3;
-                        bGame.setScreen(new playDP(bGame, 1));
+            selected = true;
+
+            indicator1.setVisible(false);
+            indicator2.setVisible(true);
+
+            RunnableAction action = new RunnableAction();
+            action.setRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    switch (currentSelection) {
+                        case 0:
+                        case 1:
+                            gameManager.difficultyRespawn(true, true);
+                            break;
+                        case 2:
+                            gameManager.difficultyRespawn(false, true);
+                            break;
+                        default:
+                            gameManager.difficultyRespawn(true, false);
+                            break;
                     }
-                });
+                    gameManager.playerLives = 3;
+                    bGame.setScreen(new playDP(bGame, 1));
+                }
+            });
 
-                stage.addAction(new SequenceAction(Actions.delay(0.2f), Actions.fadeOut(1f), action));
-            }
+            stage.addAction(new SequenceAction(Actions.delay(0.2f), Actions.fadeOut(1f), action));
         }
     }
 
@@ -208,3 +205,4 @@ public class mainMenuDP extends ScreenAdapter {
     }
 
 }
+/* Final */

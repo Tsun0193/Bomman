@@ -45,3 +45,4 @@ public class animaImg extends Image {
         setDrawable(new TextureRegionDrawable((Texture) anims.get(current).getKeyFrame(stateTime)));
     }
 }
+/* Final */
