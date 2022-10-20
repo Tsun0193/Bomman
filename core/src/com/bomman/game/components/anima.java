@@ -33,3 +33,4 @@ public class anima extends Component {
         return (TextureRegion) animas.get(state).getKeyFrame(time, looping);
     }
 }
+/* Final. */

@@ -43,11 +43,11 @@ public class bombSys extends IteratingSystem {
         Bomb.cd -= world.getDelta();
 
         if (Bomb.cd <= 0) {
-            Bomb.state = bomb.State.explode;
+            Bomb.state = bomb.State.EXPLODING;
         }
 
         switch (Bomb.state) {
-            case explode:
+            case EXPLODING:
                 State.setCurrentState("exploding");
                 gameManager.getInstance().playSound("Explosion.ogg", 1.0f, MathUtils.random(0.6f, 0.8f), 0);
                 actorBuilder ActorBuilder = actorBuilder.init(body.getWorld(), world);
@@ -57,44 +57,44 @@ public class bombSys extends IteratingSystem {
                 box2DWorld.destroyBody(body);
                 world.delete(entityId);
                 break;
-            case moveUp:
+            case MOVING_UP:
                 if (checkMovable(body, fromV.set(body.getPosition()), toV.set(body.getPosition().x, body.getPosition().y + 0.55f))) {
                     body.setLinearVelocity(0, Bomb.speed);
                 } else {
                     body.setLinearVelocity(0, 0);
                     body.setTransform(MathUtils.floor(body.getPosition().x) + 0.5f, MathUtils.floor(body.getPosition().y) + 0.5f, 0);
-                    Bomb.state = bomb.State.normal;
+                    Bomb.state = bomb.State.NORMAL;
                 }
                 break;
-            case moveDown:
+            case MOVING_DOWN:
                 if (checkMovable(body, fromV.set(body.getPosition()), toV.set(body.getPosition().x, body.getPosition().y - 0.55f))) {
                     body.setLinearVelocity(0, -Bomb.speed);
                 } else {
                     body.setLinearVelocity(0, 0);
                     body.setTransform(MathUtils.floor(body.getPosition().x) + 0.5f, MathUtils.floor(body.getPosition().y) + 0.5f, 0);
-                    Bomb.state = bomb.State.normal;
+                    Bomb.state = bomb.State.NORMAL;
                 }
                 break;
-            case moveLeft:
+            case MOVING_LEFT:
                 if (checkMovable(body, fromV.set(body.getPosition()), toV.set(body.getPosition().x - 0.55f, body.getPosition().y))) {
                     body.setLinearVelocity(-Bomb.speed, 0);
                 } else {
                     body.setLinearVelocity(0, 0);
                     body.setTransform(MathUtils.floor(body.getPosition().x) + 0.5f, MathUtils.floor(body.getPosition().y) + 0.5f, 0);
-                    Bomb.state = bomb.State.normal;
+                    Bomb.state = bomb.State.NORMAL;
                 }
                 break;
 
-            case moveRight:
+            case MOVING_RIGHT:
                 if (checkMovable(body, fromV.set(body.getPosition()), toV.set(body.getPosition().x + 0.55f, body.getPosition().y))) {
                     body.setLinearVelocity(Bomb.speed, 0);
                 } else {
                     body.setLinearVelocity(0, 0);
                     body.setTransform(MathUtils.floor(body.getPosition().x) + 0.5f, MathUtils.floor(body.getPosition().y) + 0.5f, 0);
-                    Bomb.state = bomb.State.normal;
+                    Bomb.state = bomb.State.NORMAL;
                 }
                 break;
-            case normal:
+            case NORMAL:
             default:
                 State.setCurrentState("normal");
                 break;

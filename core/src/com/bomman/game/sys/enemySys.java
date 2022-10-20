@@ -70,26 +70,26 @@ public class enemySys extends IteratingSystem {
         }
 
         if (enemy.hp <= 0) {
-            enemy.state = Enemy.State.dead;
+            enemy.state = Enemy.State.DYING;
             enemy.lifespan = 0;
         } else {
             enemy.lifespan += world.getDelta();
         }
 
         switch (enemy.state) {
-            case atkLeft:
+            case ATTACKING_LEFT:
                 State.setCurrentState("attacking_left");
                 break;
-            case atkRight:
+            case ATTACKING_RIGHT:
                 State.setCurrentState("attacking_right");
                 break;
-            case atkUp:
+            case ATTACKING_UP:
                 State.setCurrentState("attacking_up");
                 break;
-            case atkDown:
+            case ATTACKING_DOWN:
                 State.setCurrentState("attacking_down");
                 break;
-            case dead:
+            case DYING:
                 State.setCurrentState("dying");
                 Filter filter = body.getFixtureList().get(0).getFilterData();
                 filter.maskBits = gameManager.NOTHING_BIT;
@@ -121,7 +121,7 @@ public class enemySys extends IteratingSystem {
                     Transform.temp = 999;
                 }
                 break;
-            case walkLeft:
+            case WALKING_LEFT:
                 State.setCurrentState("walking_left");
                 if (body.getLinearVelocity().x > -enemy.getSpeed()) {
                     body.applyLinearImpulse(new Vector2(-enemy.getSpeed() * body.getMass(), 0), body.getWorldCenter(), true);
@@ -130,7 +130,7 @@ public class enemySys extends IteratingSystem {
                     changeWalkingState(enemy);
                 }
                 break;
-            case walkRight:
+            case WALKING_RIGHT:
                 State.setCurrentState("walking_right");
                 if (body.getLinearVelocity().x < enemy.getSpeed()) {
                     body.applyLinearImpulse(new Vector2(enemy.getSpeed() * body.getMass(), 0), body.getWorldCenter(), true);
@@ -139,7 +139,7 @@ public class enemySys extends IteratingSystem {
                     changeWalkingState(enemy);
                 }
                 break;
-            case walkUp:
+            case WALKING_UP:
                 State.setCurrentState("walking_up");
                 if (body.getLinearVelocity().y < enemy.getSpeed()) {
                     body.applyLinearImpulse(new Vector2(0, enemy.getSpeed() * body.getMass()), body.getWorldCenter(), true);
@@ -148,7 +148,7 @@ public class enemySys extends IteratingSystem {
                     changeWalkingState(enemy);
                 }
                 break;
-            case walkDown:
+            case WALKING_DOWN:
             default:
                 State.setCurrentState("walking_down");
                 if (body.getLinearVelocity().y > -enemy.getSpeed()) {

@@ -916,7 +916,7 @@ public class actorBuilder {
                     explodeThrough = false;
                     Entity e = (Entity) fixture.getBody().getUserData();
                     breakableObj obj = e.getComponent(breakableObj.class);
-                    obj.state = breakableObj.State.explode;
+                    obj.state = breakableObj.State.EXPLODING;
                     return 0;
                 }
                 return 0;
@@ -1223,3 +1223,4 @@ public class actorBuilder {
         polygonShape.dispose();
     }
 }
+/* FINAL */

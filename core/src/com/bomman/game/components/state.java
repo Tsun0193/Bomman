@@ -20,7 +20,7 @@ public class state extends Component {
     }
 
     public void setCurrentState(String currentState) {
-        if(this.currentState != currentState){
+        if(!this.currentState.equals(currentState)){
             this.currentState = currentState;
             resetStateTime();
         }
@@ -34,3 +34,4 @@ public class state extends Component {
         this.stateTime += add;
     }
 }
+/* Final */

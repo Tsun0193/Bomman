@@ -9,16 +9,16 @@ public class character extends Component {
     public float acceleration;
 
     public enum State {
-        dead,
-        idleDown,
-        idleLeft,
-        idleRight,
-        idleUp,
-        moveDown,
-        moveLeft,
-        moveRight,
-        moveUp,
-        teleport
+        DYING,
+        IDLING_DOWN,
+        IDLING_LEFT,
+        IDLING_RIGHT,
+        IDLING_UP,
+        WALKING_DOWN,
+        WALKING_LEFT,
+        WALKING_RIGHT,
+        WALKING_UP,
+        TELEPORTING
     }
     public State state;
     public static short defaultMaskBits = gameManager.INDESTRUCTABLE_BIT | gameManager.BREAKABLE_BIT | gameManager.ENEMY_BIT | gameManager.BOMB_BIT | gameManager.EXPLOSION_BIT | gameManager.POWERUP_BIT | gameManager.PORTAL_BIT;
@@ -40,14 +40,19 @@ public class character extends Component {
     public float godTimer;
     public int receivedDmg;
 
+    /**
+     * Uni-variate Constructor.
+     * @param resetPlayerAttributes boolean
+     */
     public character(boolean resetPlayerAttributes) {
-        state = State.idleRight;
+        state = State.IDLING_RIGHT;
 
         if (resetPlayerAttributes) {
             gameManager.resetPlayerAttributes();
         }
-
-        this.hp = 3;
+        this.remoteBomb = gameManager.playerRemoteBomb;
+        this.kickBomb = gameManager.playerKickBomb;
+        this.hp = 1;
         this.bombCapacity = gameManager.playerBombCount;
         this.bombRemaining = 0;
         this.bombPower = gameManager.playerBombPow;
@@ -55,8 +60,9 @@ public class character extends Component {
         this.godTimer = 3.0f;
         this.bombRegenerateTime = gameManager.playerBombGenerateTime;
         this.bombRegenerateTimeLeft = 0.0f;
-        this.maxSpeed = 5.0f + gameManager.playerMaxSpeed * 1.25f;
+        this.maxSpeed = 3.0f + gameManager.playerMaxSpeed * 1.2f;
         this.receivedDmg = 0;
+        this.acceleration = 0.1f;
     }
 
     public void damage(int dmg) {
@@ -130,5 +136,6 @@ public class character extends Component {
         bombRegenerateTimeLeft = MathUtils.clamp(bombRegenerateTimeLeft, 0, bombRegenerateTime);
     }
 }
+/* Final */
 
 

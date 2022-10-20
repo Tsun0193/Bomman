@@ -26,7 +26,7 @@ public class breakObjSys extends IteratingSystem {
         Body body = rBody.body;
 
         switch (obj.state) {
-            case explode:
+            case EXPLODING:
                 State.setCurrentState("exploding");
                 if (State.getStateTime() > 0.6f) {
                     body.getWorld().destroyBody(body);
@@ -37,7 +37,7 @@ public class breakObjSys extends IteratingSystem {
                     }
                 }
                 break;
-            case stable:
+            case NORMAL:
             default:
                 State.setCurrentState("normal");
                 break;

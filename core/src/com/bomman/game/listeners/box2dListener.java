@@ -39,11 +39,11 @@ public class box2dListener implements ContactListener {
             } else if (fixtureA.getFilterData().categoryBits == gameManager.BREAKABLE_BIT) {
                 Entity e = (Entity) fixtureA.getBody().getUserData();
                 breakableObj obj = e.getComponent(breakableObj.class);
-                obj.state = breakableObj.State.explode;
+                obj.state = breakableObj.State.EXPLODING;
             } else if (fixtureB.getFilterData().categoryBits == gameManager.BREAKABLE_BIT) {
                 Entity e = (Entity) fixtureB.getBody().getUserData();
                 breakableObj obj = e.getComponent(breakableObj.class);
-                obj.state = breakableObj.State.explode;
+                obj.state = breakableObj.State.EXPLODING;
             }
         }
         else if (fixtureA.getFilterData().categoryBits == gameManager.ENEMY_BIT || fixtureB.getFilterData().categoryBits == gameManager.ENEMY_BIT) {
@@ -113,12 +113,12 @@ public class box2dListener implements ContactListener {
                 gameManager.gameFinished = true;
                 Entity playerEntity = (Entity) fixtureB.getBody().getUserData();
                 character player = playerEntity.getComponent(character.class);
-                player.state = character.State.teleport;
+                player.state = character.State.TELEPORTING;
             } else if (fixtureB.getFilterData().categoryBits == gameManager.PORTAL_BIT) {
                 gameManager.gameFinished = true;
                 Entity playerEntity = (Entity) fixtureA.getBody().getUserData();
                 character player = playerEntity.getComponent(character.class);
-                player.state = character.State.teleport;
+                player.state = character.State.TELEPORTING;
             }
         }
     }
@@ -134,3 +134,4 @@ public class box2dListener implements ContactListener {
     public void postSolve(Contact contact, ContactImpulse contactImpulse){
     }
 }
+/* Final */

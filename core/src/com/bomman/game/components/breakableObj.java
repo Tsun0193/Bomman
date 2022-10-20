@@ -4,12 +4,13 @@ import com.artemis.Component;
 
 public class breakableObj extends Component {
     public enum State {
-        explode,
-        stable,
+        EXPLODING,
+        NORMAL,
     }
     public State state;
 
     public breakableObj(){
-         state = State.stable;
+         state = State.NORMAL;
     }
 }
+/* FINAL */

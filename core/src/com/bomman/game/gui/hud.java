@@ -67,11 +67,9 @@ public class hud implements Disposable {
         bombTimerSprite = new Sprite(bombTimerTexture);
         bombTimerSprite.setBounds(16.0f, 12.5f, 3.0f, 0.2f);
 
-        powerSprite = new Sprite(new TextureRegion(textureAtlas.findRegion("Items"), 16, 0, 16, 16));
-        speedSprite = new Sprite(new TextureRegion(textureAtlas.findRegion("Items"), 32, 0, 16, 16));
-        remoteSprite = new Sprite(new TextureRegion(textureAtlas.findRegion("Items"), 64, 0, 16, 16));
-
         lvLabel = new Label("Level", new Label.LabelStyle(new BitmapFont(Gdx.files.internal("fonts/foo.fnt")), Color.WHITE));
+        lvLabel.setPosition(15.5f * SCALE, 3.0f * SCALE);
+        lvLabel.setFontScale(0.4f);
         stringBuilder = new StringBuilder();
 
         TextureRegion itemTexture = textureAtlas.findRegion("Items");
@@ -95,7 +93,6 @@ public class hud implements Disposable {
         bommanSprite = new Sprite((Texture) bommanAnimation.getKeyFrame(0));
         bommanSprite.setBounds(17.5f, 0.5f, 2f, 3f);
         stateTime = 0;
-        stringBuilder = new StringBuilder();
 
         FitViewport viewport = new FitViewport(width * SCALE, height * SCALE);
         stage = new Stage(viewport, batch);
@@ -220,3 +217,4 @@ public class hud implements Disposable {
         lvLabel.setText("Level: " + lv);
     }
 }
+/* Final */

@@ -152,3 +152,4 @@ public class mapBuilder {
         return sprite;
     }
 }
+/* FINAL */

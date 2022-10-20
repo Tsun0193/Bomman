@@ -10,16 +10,16 @@ public class Enemy extends Component {
             gameManager.EXPLOSION_BIT;
 
     public enum State {
-        dead,
-        walkDown,
-        walkLeft,
-        walkRight,
-        walkUp,
-        atkDown,
-        atkLeft,
-        atkRight,
-        atkUp,
-        damaged;
+        DYING,
+        WALKING_DOWN,
+        WALKING_LEFT,
+        WALKING_RIGHT,
+        WALKING_UP,
+        ATTACKING_DOWN,
+        ATTACKING_LEFT,
+        ATTACKING_RIGHT,
+        ATTACKING_UP,
+        DAMAGED;
         public static State getRandWalkingState() {
             return values()[(int)(Math.random()*4)];
         }
@@ -82,5 +82,6 @@ public class Enemy extends Component {
     }
 
 }
+/* Final */
 
 

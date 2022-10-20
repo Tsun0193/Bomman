@@ -10,3 +10,4 @@ public class rigidBody extends Component {
         this.body = body;
     }
 }
+/* Final */
