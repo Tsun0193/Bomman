@@ -113,12 +113,12 @@ public class box2dListener implements ContactListener {
                 gameManager.gameFinished = true;
                 Entity playerEntity = (Entity) fixtureB.getBody().getUserData();
                 character player = playerEntity.getComponent(character.class);
-                player.state = character.State.TELEPORTING;
+                player.state = character.State.teleport;
             } else if (fixtureB.getFilterData().categoryBits == gameManager.PORTAL_BIT) {
                 gameManager.gameFinished = true;
                 Entity playerEntity = (Entity) fixtureA.getBody().getUserData();
                 character player = playerEntity.getComponent(character.class);
-                player.state = character.State.TELEPORTING;
+                player.state = character.State.teleport;
             }
         }
     }

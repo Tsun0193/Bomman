@@ -47,7 +47,7 @@ public class playerSys extends IteratingSystem {
 
         float maxSpeed = Character.maxSpeed;
 
-        if (Character.hp > 0 && Character.state != character.State.TELEPORTING) {
+        if (Character.hp > 0 && Character.state != character.State.teleport) {
             if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
                 Character.powerUpAmmo();
             }
@@ -73,7 +73,7 @@ public class playerSys extends IteratingSystem {
                     }
                 }
 
-                Character.state = character.State.WALKING_UP;
+                Character.state = character.State.moveUp;
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
@@ -83,7 +83,7 @@ public class playerSys extends IteratingSystem {
                     }
                 }
 
-                Character.state = character.State.WALKING_DOWN;
+                Character.state = character.State.moveDown;
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
@@ -93,7 +93,7 @@ public class playerSys extends IteratingSystem {
                     }
                 }
 
-                Character.state = character.State.WALKING_LEFT;
+                Character.state = character.State.moveLeft;
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
@@ -103,7 +103,7 @@ public class playerSys extends IteratingSystem {
                     }
                 }
 
-                Character.state = character.State.WALKING_RIGHT;
+                Character.state = character.State.moveRight;
             }
 
             // set bomb or kick bomb
@@ -111,24 +111,24 @@ public class playerSys extends IteratingSystem {
                 kicking = false;
                 if (Character.kickBomb) {
                     switch (Character.state) {
-                        case WALKING_UP:
+                        case moveUp:
                             if (checkCanKickBomb(body, fromV.set(body.getPosition()), toV.set(new Vector2(body.getPosition().x, body.getPosition().y + 0.6f)))) {
-                                kickedBomb.setMove(bomb.State.MOVING_UP);
+                                kickedBomb.setMove(bomb.State.moveUp);
                             }
                             break;
-                        case WALKING_DOWN:
+                        case moveDown:
                             if (checkCanKickBomb(body, fromV.set(body.getPosition()), toV.set(new Vector2(body.getPosition().x, body.getPosition().y - 0.6f)))) {
-                                kickedBomb.setMove(bomb.State.MOVING_DOWN);
+                                kickedBomb.setMove(bomb.State.moveDown);
                             }
                             break;
-                        case WALKING_LEFT:
+                        case moveLeft:
                             if (checkCanKickBomb(body, fromV.set(body.getPosition()), toV.set(new Vector2(body.getPosition().x - 0.6f, body.getPosition().y)))) {
-                                kickedBomb.setMove(bomb.State.MOVING_LEFT);
+                                kickedBomb.setMove(bomb.State.moveLeft);
                             }
                             break;
-                        case WALKING_RIGHT:
+                        case moveRight:
                             if (checkCanKickBomb(body, fromV.set(body.getPosition()), toV.set(new Vector2(body.getPosition().x + 0.6f, body.getPosition().y)))) {
-                                kickedBomb.setMove(bomb.State.MOVING_RIGHT);
+                                kickedBomb.setMove(bomb.State.moveRight);
                             }
                             break;
                         default:
@@ -181,17 +181,17 @@ public class playerSys extends IteratingSystem {
 
         if (linearVelocity.len2() < 0.1f) {
             switch (Character.state) {
-                case WALKING_UP:
-                    Character.state = character.State.IDLING_UP;
+                case moveUp:
+                    Character.state = character.State.idleUp;
                     break;
-                case WALKING_DOWN:
-                    Character.state = character.State.IDLING_DOWN;
+                case moveDown:
+                    Character.state = character.State.idleDown;
                     break;
-                case WALKING_LEFT:
-                    Character.state = character.State.IDLING_LEFT;
+                case moveLeft:
+                    Character.state = character.State.idleLeft;
                     break;
-                case WALKING_RIGHT:
-                    Character.state = character.State.IDLING_RIGHT;
+                case moveRight:
+                    Character.state = character.State.idleRight;
                     break;
                 default:
                     break;
@@ -221,11 +221,11 @@ public class playerSys extends IteratingSystem {
         }
 
         if (Character.hp <= 0) {
-            Character.state = character.State.DYING;
+            Character.state = character.State.dead;
         }
 
         switch (Character.state) {
-            case DYING:
+            case dead:
                 State.setCurrentState("dead");
                 Filter filter = body.getFixtureList().get(0).getFilterData();
                 filter.maskBits = gameManager.NOTHING_BIT;
@@ -250,31 +250,31 @@ public class playerSys extends IteratingSystem {
                     }
                 }
                 break;
-            case TELEPORTING:
+            case teleport:
                 State.setCurrentState("teleport");
                 break;
-            case WALKING_UP:
+            case moveUp:
                 State.setCurrentState("moveUp");
                 break;
-            case WALKING_LEFT:
+            case moveLeft:
                 State.setCurrentState("moveLeft");
                 break;
-            case WALKING_DOWN:
+            case moveDown:
                 State.setCurrentState("moveDown");
                 break;
-            case WALKING_RIGHT:
+            case moveRight:
                 State.setCurrentState("moveRight");
                 break;
-            case IDLING_LEFT:
+            case idleLeft:
                 State.setCurrentState("idleLeft");
                 break;
-            case IDLING_RIGHT:
+            case idleRight:
                 State.setCurrentState("idleRight");
                 break;
-            case IDLING_UP:
+            case idleUp:
                 State.setCurrentState("idleUp");
                 break;
-            case IDLING_DOWN:
+            case idleDown:
             default:
                 State.setCurrentState("idleDown");
                 break;

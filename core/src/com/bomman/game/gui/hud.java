@@ -130,7 +130,7 @@ public class hud implements Disposable {
         handleInput();
 
         stateTime += f;
-        bommanSprite.setRegion((Texture) bommanAnimation.getKeyFrame(stateTime));
+        bommanSprite.setRegion((TextureRegion) bommanAnimation.getKeyFrame(stateTime));
 
         if (gameManager.playerRemoteBomb) {
             if (gameManager.playerBombPow + 1 < character.MAX_BOMB_POWER) {

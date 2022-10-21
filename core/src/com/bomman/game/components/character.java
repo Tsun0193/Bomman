@@ -9,16 +9,16 @@ public class character extends Component {
     public float acceleration;
 
     public enum State {
-        DYING,
-        IDLING_DOWN,
-        IDLING_LEFT,
-        IDLING_RIGHT,
-        IDLING_UP,
-        WALKING_DOWN,
-        WALKING_LEFT,
-        WALKING_RIGHT,
-        WALKING_UP,
-        TELEPORTING
+        dead,
+        idleDown,
+        idleLeft,
+        idleRight,
+        idleUp,
+        moveDown,
+        moveLeft,
+        moveRight,
+        moveUp,
+        teleport
     }
     public State state;
     public static short defaultMaskBits = gameManager.INDESTRUCTABLE_BIT | gameManager.BREAKABLE_BIT | gameManager.ENEMY_BIT | gameManager.BOMB_BIT | gameManager.EXPLOSION_BIT | gameManager.POWERUP_BIT | gameManager.PORTAL_BIT;
@@ -49,7 +49,7 @@ public class character extends Component {
      * @param resetPlayerAttributes boolean
      */
     public character(boolean resetPlayerAttributes) {
-        state = State.IDLING_RIGHT;
+        state = State.idleRight;
 
         if (resetPlayerAttributes) {
             gameManager.resetPlayerAttributes();

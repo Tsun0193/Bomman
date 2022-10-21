@@ -9,10 +9,10 @@ public class bomb extends Component {
             gameManager.EXPLOSION_BIT;
     public enum State {
         NORMAL,
-        MOVING_UP,
-        MOVING_DOWN,
-        MOVING_LEFT,
-        MOVING_RIGHT,
+        moveUp,
+        moveDown,
+        moveLeft,
+        moveRight,
         EXPLODING
     }
     public State state;

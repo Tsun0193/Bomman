@@ -57,7 +57,7 @@ public class bombSys extends IteratingSystem {
                 box2DWorld.destroyBody(body);
                 world.delete(entityId);
                 break;
-            case MOVING_UP:
+            case moveUp:
                 if (checkMovable(body, fromV.set(body.getPosition()), toV.set(body.getPosition().x, body.getPosition().y + 0.55f))) {
                     body.setLinearVelocity(0, Bomb.speed);
                 } else {
@@ -66,7 +66,7 @@ public class bombSys extends IteratingSystem {
                     Bomb.state = bomb.State.NORMAL;
                 }
                 break;
-            case MOVING_DOWN:
+            case moveDown:
                 if (checkMovable(body, fromV.set(body.getPosition()), toV.set(body.getPosition().x, body.getPosition().y - 0.55f))) {
                     body.setLinearVelocity(0, -Bomb.speed);
                 } else {
@@ -75,7 +75,7 @@ public class bombSys extends IteratingSystem {
                     Bomb.state = bomb.State.NORMAL;
                 }
                 break;
-            case MOVING_LEFT:
+            case moveLeft:
                 if (checkMovable(body, fromV.set(body.getPosition()), toV.set(body.getPosition().x - 0.55f, body.getPosition().y))) {
                     body.setLinearVelocity(-Bomb.speed, 0);
                 } else {
@@ -85,7 +85,7 @@ public class bombSys extends IteratingSystem {
                 }
                 break;
 
-            case MOVING_RIGHT:
+            case moveRight:
                 if (checkMovable(body, fromV.set(body.getPosition()), toV.set(body.getPosition().x + 0.55f, body.getPosition().y))) {
                     body.setLinearVelocity(Bomb.speed, 0);
                 } else {

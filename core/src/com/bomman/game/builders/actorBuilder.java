@@ -238,7 +238,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP);
-        animas.put("walking_up", anima);
+        animas.put("moveUp", anima);
 
         // walking left
         keyFrames.clear();
@@ -246,7 +246,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP);
-        animas.put("walking_left", anima);
+        animas.put("moveLeft", anima);
 
         // walking down
         keyFrames.clear();
@@ -254,7 +254,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP);
-        animas.put("walking_down", anima);
+        animas.put("moveDown", anima);
 
         // walking right
         keyFrames.clear();
@@ -262,31 +262,31 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP);
-        animas.put("walking_right", anima);
+        animas.put("moveRight", anima);
 
         // idling up
         keyFrames.clear();
         keyFrames.add(new TextureRegion(textureRegion, 16, 0, 16, 24));
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.NORMAL);
-        animas.put("idling_up", anima);
+        animas.put("idleUp", anima);
 
         // idling left
         keyFrames.clear();
         keyFrames.add(new TextureRegion(textureRegion, 3 * 16, 0, 16, 24));
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.NORMAL);
-        animas.put("idling_left", anima);
+        animas.put("idleLeft", anima);
 
         // idling down
         keyFrames.clear();
         keyFrames.add(new TextureRegion(textureRegion, 7 * 16, 0, 16, 24));
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.NORMAL);
-        animas.put("idling_down", anima);
+        animas.put("idleDown", anima);
 
         // idling right
         keyFrames.clear();
         keyFrames.add(new TextureRegion(textureRegion, 9 * 16, 0, 16, 24));
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.NORMAL);
-        animas.put("idling_right", anima);
+        animas.put("idleRight", anima);
 
         // dying
         keyFrames.clear();
@@ -294,7 +294,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.NORMAL);
-        animas.put("dying", anima);
+        animas.put("dead", anima);
 
         // teleporting
         keyFrames.clear();
@@ -303,7 +303,7 @@ public class actorBuilder {
         keyFrames.add(new TextureRegion(textureRegion, 16 * 7, 0, 16, 24));
         keyFrames.add(new TextureRegion(textureRegion, 16 * 9, 0, 16, 24));
         anima = new Animation<>(0.05f, keyFrames, Animation.PlayMode.LOOP);
-        animas.put("teleporting", anima);
+        animas.put("teleport", anima);
 
         renderer Renderer = new renderer(new TextureRegion(textureRegion, 0, 0, 16, 24), 16 / gameManager.PPM, 24 / gameManager.PPM);
         Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
@@ -314,7 +314,7 @@ public class actorBuilder {
                         new character(resetPlayerAbilities),
                         new transform(x, y, 1, 1, 0),
                         new rigidBody(body),
-                        new state("idling_down"),
+                        new state("idleDown"),
                         Renderer,
                         new anima(animas)
                 )
@@ -351,7 +351,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP);
-        animas.put("walking_down", anima);
+        animas.put("moveDown", anima);
 
         keyFrames.clear();
         // walking up
@@ -359,7 +359,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP);
-        animas.put("walking_up", anima);
+        animas.put("moveUp", anima);
 
         keyFrames.clear();
         // walking left
@@ -367,7 +367,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP);
-        animas.put("walking_left", anima);
+        animas.put("moveLeft", anima);
 
         keyFrames.clear();
         // walking right
@@ -377,7 +377,7 @@ public class actorBuilder {
             keyFrames.add(textureRegionRight);
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP);
-        animas.put("walking_right", anima);
+        animas.put("moveRight", anima);
 
         keyFrames.clear();
         // dying
@@ -386,7 +386,7 @@ public class actorBuilder {
             keyFrames.add(textureRegionRight);
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.NORMAL);
-        animas.put("dying", anima);
+        animas.put("dead", anima);
 
         renderer Renderer = new renderer(new TextureRegion(textureRegion, 0, 0, 16, 24), 16 / gameManager.PPM, 24 / gameManager.PPM);
         Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
@@ -395,7 +395,7 @@ public class actorBuilder {
                 new Enemy(1, 0.8f),
                 new transform(x, y, 1, 1, 0),
                 new rigidBody(body),
-                new state("walking_down"),
+                new state("moveDown"),
                 Renderer,
                 new anima(animas)
         ).build();
@@ -576,7 +576,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
-        animas.put("walking_down", anima);
+        animas.put("moveDown", anima);
 
         keyFrames.clear();
         // walking up
@@ -584,7 +584,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 24, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
-        animas.put("walking_up", anima);
+        animas.put("moveUp", anima);
 
         keyFrames.clear();
         // walking left
@@ -592,7 +592,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 24 * 2, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
-        animas.put("walking_left", anima);
+        animas.put("moveLeft", anima);
 
         keyFrames.clear();
         // walking right
@@ -600,7 +600,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 24 * 3, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
-        animas.put("walking_right", anima);
+        animas.put("moveRight", anima);
 
         keyFrames.clear();
         // dying
@@ -609,7 +609,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, 0, 0, 0, 0));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.NORMAL);
-        animas.put("dying", anima);
+        animas.put("dead", anima);
 
         keyFrames.clear();
         // attacking (up)
@@ -617,7 +617,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 24 * 4, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
-        animas.put("attacking_up", anima);
+        animas.put("attackUp", anima);
 
         renderer Renderer = new renderer(new TextureRegion(textureRegion, 0, 0, 16, 24), 16 / gameManager.PPM, 24 / gameManager.PPM);
         Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
@@ -626,7 +626,7 @@ public class actorBuilder {
                 new Enemy(1, 1.0f, "EnemyDie2.ogg", "bomb"),
                 new transform(x, y, 1, 1, 0),
                 new rigidBody(body),
-                new state("walking_down"),
+                new state("moveDown"),
                 Renderer,
                 new anima(animas)
         ).build();
@@ -662,7 +662,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
-        animas.put("walking_down", anima);
+        animas.put("moveDown", anima);
 
         keyFrames.clear();
         // walking up
@@ -670,7 +670,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
-        animas.put("walking_up", anima);
+        animas.put("moveUp", anima);
 
         keyFrames.clear();
         // walking left
@@ -678,7 +678,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
-        animas.put("walking_left", anima);
+        animas.put("moveLeft", anima);
 
         keyFrames.clear();
         // walking right
@@ -686,7 +686,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
-        animas.put("walking_right", anima);
+        animas.put("moveRight", anima);
 
         keyFrames.clear();
         // dying
@@ -694,7 +694,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.NORMAL);
-        animas.put("dying", anima);
+        animas.put("dead", anima);
 
         renderer Renderer = new renderer(new TextureRegion(textureRegion, 0, 0, 16, 24), 16 / gameManager.PPM, 24 / gameManager.PPM);
         Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
@@ -703,7 +703,7 @@ public class actorBuilder {
                 new Enemy(1, 1.2f, "EnemyDie1.ogg"),
                 new transform(x, y, 1, 1, 0),
                 new rigidBody(body),
-                new state("walking_down"),
+                new state("moveDown"),
                 Renderer,
                 new anima(animas)
         ).build();
@@ -739,7 +739,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 0, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP);
-        animas.put("walking_down", anima);
+        animas.put("moveDown", anima);
 
         keyFrames.clear();
         // walking up
@@ -747,7 +747,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 24, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP);
-        animas.put("walking_up", anima);
+        animas.put("moveUp", anima);
 
         keyFrames.clear();
         // walking left
@@ -755,7 +755,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 24 * 2, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP);
-        animas.put("walking_left", anima);
+        animas.put("moveLeft", anima);
 
         keyFrames.clear();
         // walking right
@@ -765,7 +765,7 @@ public class actorBuilder {
             keyFrames.add(walkingRight);
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP);
-        animas.put("walking_right", anima);
+        animas.put("moveRight", anima);
 
         keyFrames.clear();
         // dying
@@ -773,7 +773,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 16, 24 * 2, 16, 24));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.NORMAL);
-        animas.put("dying", anima);
+        animas.put("dead", anima);
 
         renderer Renderer = new renderer(new TextureRegion(textureRegion, 0, 0, 16, 24), 16 / gameManager.PPM, 24 / gameManager.PPM);
         Renderer.setSpriteOrigin(16 / gameManager.PPM / 2, 16 / gameManager.PPM / 2);
@@ -782,7 +782,7 @@ public class actorBuilder {
                         new Enemy(1, 1.6f, "EnemyDie2.ogg"),
                         new transform(x, y, 1, 1, 0),
                         new rigidBody(body),
-                        new state("walking_down"),
+                        new state("moveDown"),
                         Renderer,
                         new anima(animas)
                 )
@@ -818,7 +818,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, 0, 0, 80, 160));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.NORMAL);
-        animas.put("walking_up", anima);
+        animas.put("moveUp", anima);
 
         keyFrames.clear();
         // walking up
@@ -826,7 +826,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, 0, 0, 80, 160));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.NORMAL);
-        animas.put("walking_down", anima);
+        animas.put("moveDown", anima);
 
         keyFrames.clear();
         // walking left
@@ -834,7 +834,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, 0, 0, 80, 160));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.NORMAL);
-        animas.put("walking_left", anima);
+        animas.put("moveLeft", anima);
 
         keyFrames.clear();
         // walking right
@@ -842,7 +842,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, 0, 0, 80, 160));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.NORMAL);
-        animas.put("walking_right", anima);
+        animas.put("moveRight", anima);
 
         keyFrames.clear();
         // dying
@@ -850,7 +850,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, 0, 0, 80, 160));
         }
         anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.NORMAL);
-        animas.put("dying", anima);
+        animas.put("dead", anima);
 
         keyFrames.clear();
         // damaged
@@ -866,7 +866,7 @@ public class actorBuilder {
             keyFrames.add(new TextureRegion(textureRegion, i * 80, 0, 80, 160));
         }
         anima = new Animation<>(0.2f, keyFrames, Animation.PlayMode.NORMAL);
-        animas.put("attacking_down", anima);
+        animas.put("attackDown", anima);
 
         renderer Renderer = new renderer(new TextureRegion(textureRegion, 0, 0, 80, 160), 80 / gameManager.PPM, 160 / gameManager.PPM);
         Renderer.setSpriteOrigin(80 / gameManager.PPM / 2, 160 / gameManager.PPM / 2);
@@ -875,7 +875,7 @@ public class actorBuilder {
                 new Enemy(8, 1.2f, "EnemyDie1.ogg", "boss1"),
                 new transform(x, y, 1, 1, 0),
                 new rigidBody(body),
-                new state("walking_down"),
+                new state("moveDown"),
                 Renderer,
                 new anima(animas)
         ).build();

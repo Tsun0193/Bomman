@@ -137,7 +137,7 @@ public class gameManager implements Disposable {
      * Reset Player Properties Function.
      */
     public static void resetPlayerAttributes() {
-        playerMaxSpeed = 0;
+        playerMaxSpeed = 3;
         playerBombCount = 3;
         playerBombPow = 0;
         playerBombInteractablity = false;
