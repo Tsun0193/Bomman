@@ -8,6 +8,9 @@ import com.bomman.game.game.gameManager;
 public class particle extends Component {
     public ParticleEffect particleEffect;
 
+    public particle() {
+
+    }
     /**
      *  Multi-variate Constructor.
      */

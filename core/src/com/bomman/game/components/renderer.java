@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class renderer extends Component {
     private Sprite sprite;
 
+    public renderer() {
+
+    }
     /**
      * Constructor.
      *

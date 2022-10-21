@@ -35,6 +35,9 @@ public class Enemy extends Component {
     private String sound;
     public String type;
 
+    public Enemy() {
+        
+    }
     public Enemy(int hp) {
         this(hp, 2);
     }

@@ -26,7 +26,8 @@ public class anima extends Component {
     }
 
     public TextureRegion getTextureRegion(String state, float time){
-        return (TextureRegion) this.animas.get(state).getKeyFrame(time);
+        Animation a = this.animas.get(state);
+        return (TextureRegion) a.getKeyFrame(time);
     }
 
     public TextureRegion getTextureRegion(String state, float time, boolean looping) {

@@ -40,6 +40,10 @@ public class character extends Component {
     public float godTimer;
     public int receivedDmg;
 
+    public character() {
+
+    }
+
     /**
      * Uni-variate Constructor.
      * @param resetPlayerAttributes boolean

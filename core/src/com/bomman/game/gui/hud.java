@@ -90,7 +90,7 @@ public class hud implements Disposable {
             keyFrames.add(new TextureRegion(textureAtlas.findRegion("Bomberman_big"), 32 * i, 0, 32, 48));
         }
         bommanAnimation = new Animation(0.2f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
-        bommanSprite = new Sprite((Texture) bommanAnimation.getKeyFrame(0));
+        bommanSprite = new Sprite((TextureRegion) bommanAnimation.getKeyFrame(0));
         bommanSprite.setBounds(17.5f, 0.5f, 2f, 3f);
         stateTime = 0;
 

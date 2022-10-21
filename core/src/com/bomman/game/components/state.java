@@ -6,6 +6,9 @@ public class state extends Component {
     private String currentState;
     private float stateTime;
 
+    public state() {
+
+    }
     public state(String state){
         stateTime = 0;
         this.currentState = state;
