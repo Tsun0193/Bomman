@@ -16,8 +16,6 @@ import com.bomman.game.display.animaImg.animaImg;
 import com.bomman.game.game.gameManager;
 
 public class endingDP extends ScreenAdapter {
-    private final float WIDTH = 640;
-    private final float HEIGHT = 480;
 
     private final BGame game;
     private final SpriteBatch batch;
@@ -37,6 +35,8 @@ public class endingDP extends ScreenAdapter {
 
     @Override
     public void show() {
+        float WIDTH = 640;
+        float HEIGHT = 480;
         viewport = new FitViewport(WIDTH, HEIGHT);
         stage = new Stage(viewport, batch);
 
@@ -47,14 +47,14 @@ public class endingDP extends ScreenAdapter {
         for (int i = 9; i < 12; i++) {
             keyFrames.add(new TextureRegion(bomberman, 16 * i, 0, 16, 24));
         }
-        Animation anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP);
+        Animation<TextureRegion> anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP);
         final animaImg bombermanAnimImage = new animaImg(new TextureRegion(bomberman, 0, 0, 16, 24));
         bombermanAnimImage.put("walking", anima);
 
         keyFrames.clear();
         // Character idling animation
         keyFrames.add(new TextureRegion(bomberman, 16 * 7, 0, 16, 24));
-        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.NORMAL);
         bombermanAnimImage.put("idling", anima);
 
         keyFrames.clear();
@@ -62,7 +62,7 @@ public class endingDP extends ScreenAdapter {
         for (int i = 12; i < 13; i++) {
             keyFrames.add(new TextureRegion(bomberman, 16 * i, 0, 16, 24));
         }
-        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.NORMAL);
         bombermanAnimImage.put("shocked", anima);
 
         bombermanAnimImage.setScale(2.5f);
@@ -76,7 +76,7 @@ public class endingDP extends ScreenAdapter {
         for (int i = 0; i < 3; i++) {
             keyFrames.add(new TextureRegion(princess, 16 * i, 0, 16, 24));
         }
-        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.LOOP);
+        anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.LOOP);
         princessAnimImage.put("walking", anima);
 
         keyFrames.clear();
@@ -85,7 +85,7 @@ public class endingDP extends ScreenAdapter {
         for (int i = 3; i < 4; i++) {
             keyFrames.add(new TextureRegion(princess, 16 * i, 0, 16, 24));
         }
-        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.NORMAL);
         princessAnimImage.put("idling", anima);
 
         keyFrames.clear();
@@ -94,7 +94,7 @@ public class endingDP extends ScreenAdapter {
         for (int i = 5; i < 6; i++) {
             keyFrames.add(new TextureRegion(princess, 16 * i, 0, 16, 24));
         }
-        anima = new Animation(0.1f, keyFrames, Animation.PlayMode.NORMAL);
+        anima = new Animation<>(0.1f, keyFrames, Animation.PlayMode.NORMAL);
         princessAnimImage.put("dying", anima);
 
         princessAnimImage.setCurrent("walking");

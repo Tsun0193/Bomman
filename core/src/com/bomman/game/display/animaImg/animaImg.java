@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import java.util.HashMap;
 
 public class animaImg extends Image {
-    private HashMap<String, Animation> anims;
+    private HashMap<String, Animation<TextureRegion>> anims;
 
     private String current;
     private float stateTime;
@@ -21,7 +21,7 @@ public class animaImg extends Image {
         current = "";
     }
 
-    public void put(String key, Animation anim) {
+    public void put(String key, Animation<TextureRegion> anim) {
         anims.put(key, anim);
         setCurrent(key);
     }
@@ -42,7 +42,7 @@ public class animaImg extends Image {
     public void act(float delta) {
         super.act(delta);
         stateTime += delta;
-        setDrawable(new TextureRegionDrawable((Texture) anims.get(current).getKeyFrame(stateTime)));
+        setDrawable(new TextureRegionDrawable(anims.get(current).getKeyFrame(stateTime)));
     }
 }
 /* Final */

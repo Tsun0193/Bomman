@@ -42,7 +42,6 @@ public class hud implements Disposable {
     private boolean showFPS = false;
     private StringBuilder stringBuilder;
     private final float leftAlignment = 15.5f;
-    private final float SCALE = 16.0f;
     private float stateTime;
 
 
@@ -68,12 +67,13 @@ public class hud implements Disposable {
         bombTimerSprite.setBounds(16.0f, 12.5f, 3.0f, 0.2f);
 
         lvLabel = new Label("Level", new Label.LabelStyle(new BitmapFont(Gdx.files.internal("fonts/foo.fnt")), Color.WHITE));
+        float SCALE = 16.0f;
         lvLabel.setPosition(15.5f * SCALE, 3.0f * SCALE);
         lvLabel.setFontScale(0.4f);
         stringBuilder = new StringBuilder();
 
         TextureRegion itemTexture = textureAtlas.findRegion("Items");
-        powerSprite = new Sprite(new TextureRegion(itemTexture, 16 * 1, 0, 16, 16));
+        powerSprite = new Sprite(new TextureRegion(itemTexture, 16, 0, 16, 16));
         powerSprite.setBounds(leftAlignment, 9.0f, 1, 1);
 
         speedSprite = new Sprite(new TextureRegion(itemTexture, 16 * 2, 0, 16, 16));
@@ -89,7 +89,7 @@ public class hud implements Disposable {
         for (int i = 0; i <= 4; i++) {
             keyFrames.add(new TextureRegion(textureAtlas.findRegion("Bomberman_big"), 32 * i, 0, 32, 48));
         }
-        bommanAnimation = new Animation(0.2f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
+        bommanAnimation = new Animation<>(0.2f, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
         bommanSprite = new Sprite((TextureRegion) bommanAnimation.getKeyFrame(0));
         bommanSprite.setBounds(17.5f, 0.5f, 2f, 3f);
         stateTime = 0;
@@ -136,13 +136,13 @@ public class hud implements Disposable {
             if (gameManager.playerBombPow + 1 < character.MAX_BOMB_POWER) {
                 bombSprite.setRegion(new TextureRegion(textureAtlas.findRegion("Bomb"), 16 * 3, 0, 16, 16));
             } else {
-                bombSprite.setRegion(new TextureRegion(textureAtlas.findRegion("Bomb"), 16 * 3, 16 * 1, 16, 16));
+                bombSprite.setRegion(new TextureRegion(textureAtlas.findRegion("Bomb"), 16 * 3, 16, 16, 16));
             }
         } else {
             if (gameManager.playerBombPow + 1 < character.MAX_BOMB_POWER) {
                 bombSprite.setRegion(new TextureRegion(textureAtlas.findRegion("Bomb"), 0, 0, 16, 16));
             } else {
-                bombSprite.setRegion(new TextureRegion(textureAtlas.findRegion("Bomb"), 0, 16 * 1, 16, 16));
+                bombSprite.setRegion(new TextureRegion(textureAtlas.findRegion("Bomb"), 0, 16, 16, 16));
             }
         }
 

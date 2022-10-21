@@ -41,13 +41,10 @@ public class playDP extends ScreenAdapter {
 
     private int mapWidth;
     private int mapHeight;
-    private int level;
+    private final int level;
     private float box2dTimer;
-    private final float WIDTH = 20;
-    private final float HEIGHT = 15;
     private boolean pauseFlag;
     private boolean changeScr;
-    private Skin skin;
 
     private Window pauseWindow;
     private OrthographicCamera camera;
@@ -81,6 +78,8 @@ public class playDP extends ScreenAdapter {
     @Override
     public void show() {
         camera = new OrthographicCamera();
+        float WIDTH = 20;
+        float HEIGHT = 15;
         viewport = new FitViewport(WIDTH, HEIGHT, camera);
         camera.position.set(WIDTH / 2, HEIGHT / 2, 0);
 
@@ -146,7 +145,7 @@ public class playDP extends ScreenAdapter {
         pauseFlag = false;
 
         stage2 = new Stage(new FitViewport(640, 480), batch);
-        skin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal("uiskin/uiskin.json"));
         pauseWindow = new Window("Pause", skin);
         pauseWindow.setPosition((640 - pauseWindow.getWidth()) / 2, (480 - pauseWindow.getHeight()) / 2);
         pauseWindow.setVisible(pauseFlag);
