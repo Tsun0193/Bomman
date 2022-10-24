@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.bomman.game.BGame;
+import com.bomman.game.checkpoint.checkpoint;
 import com.bomman.game.game.gameManager;
 
 
@@ -165,7 +166,8 @@ public class mainMenuDP extends ScreenAdapter {
                             gameManager.difficultyRespawn(true, false);
                             break;
                     }
-                    gameManager.playerLives = 3;
+                    checkpoint Store = new checkpoint("Untitled Save");
+                    gameManager.playerLives = Store.getInt("playerLives");
                     bGame.setScreen(new playDP(bGame, 1));
                 }
             });
