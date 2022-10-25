@@ -40,7 +40,7 @@ public class gameManager implements Disposable {
     public static int playerBombCount = 3;
     public static int playerBombRemaining = 0;
     public static int playerMaxSpeed = 0;
-    public static int playerBombPow = 0;
+    public static int playerBombPow = 1;
     public static float playerBombGenerateTime = 0.0f;
     public static float playerBombGenerateTimeLeft = 0.0f;
     public static boolean playerBombInteractablity = false;
@@ -139,7 +139,7 @@ public class gameManager implements Disposable {
     public static void resetPlayerAttributes() {
         playerMaxSpeed = 3;
         playerBombCount = 3;
-        playerBombPow = 0;
+        playerBombPow = 2;
         playerBombInteractablity = false;
         playerBombGenerateTime = 2.0f;
         playerRemoteBomb = false;

@@ -66,7 +66,7 @@ public class character extends Component {
         this.bombRegenerateTimeLeft = 0.0f;
         this.maxSpeed = 3.0f + gameManager.playerMaxSpeed * 1.2f;
         this.receivedDmg = 0;
-        this.acceleration = 0.1f;
+        this.acceleration = 1.5f;
     }
 
     public void damage(int dmg) {
