@@ -22,6 +22,8 @@ import com.bomman.game.BGame;
 import com.bomman.game.checkpoint.checkpoint;
 import com.bomman.game.game.gameManager;
 
+import java.io.File;
+
 
 public class mainMenuDP extends ScreenAdapter {
     private final BGame bGame;
@@ -122,7 +124,6 @@ public class mainMenuDP extends ScreenAdapter {
         }
 
         if (!loaded && !selected && Gdx.input.isKeyJustPressed(Input.Keys.X) || Gdx.input.isKeyJustPressed(Input.Keys.Z)) {
-            gameManager.getInstance().playSound("Pickup.ogg");
             loaded = true;
             selected = false;
             Pixmap pixmap = new Pixmap(640, 480, Pixmap.Format.RGB888);
@@ -133,18 +134,27 @@ public class mainMenuDP extends ScreenAdapter {
             Image background = new Image(backgroundTexture);
             stage.addActor(background);
             stage.clear();
+            style = new Label.LabelStyle();
+            style.font = this.font;
+            style.fontColor = Color.WHITE;
 
-            if (currentLoaded != 0 && loaded) { //New Game
-                style = new Label.LabelStyle();
-                style.font = this.font;
-                style.fontColor = Color.WHITE;
+            title = new Label("Bomman", style);
+            title.setFontScale(1.6f);
+            title.setPosition(140, 360);
 
-                title = new Label("Bomman", style);
-                title.setFontScale(1.6f);
-                title.setPosition(140, 360);
+            xIndicator = 160.0f;
+            yIndicator = 240.0f;
+            indicator1.setPosition(xIndicator, yIndicator);
+            indicator2.setPosition(xIndicator, yIndicator);
 
-                xIndicator = 160.0f;
-                yIndicator = 240.0f;
+            if (currentLoaded != 0) { //New Game
+                gameManager.getInstance().playSound("Pickup.ogg");
+                indicatorTexture = new Texture("img/newGameIndications.png");
+                indicator = new Image(indicatorTexture);
+                indicator.setPosition(640.0f - indicator.getWidth() - 12.0f, 3.0f);
+
+                indicator1.setPosition(xIndicator, yIndicator);
+                indicator2.setPosition(xIndicator, yIndicator);
 
                 Label easyLabel = new Label("Easy", style);
                 easyLabel.setPosition((640 - easyLabel.getWidth()) / 2, 240);
@@ -155,8 +165,6 @@ public class mainMenuDP extends ScreenAdapter {
                 Label hardLabel = new Label("Hard", style);
                 hardLabel.setPosition((640 - hardLabel.getWidth()) / 2, 120);
 
-                indicator1.setPosition(xIndicator, yIndicator);
-                indicator2.setPosition(xIndicator, yIndicator);
                 currentSelection = 0;
 
                 stage.addActor(background);
@@ -167,6 +175,30 @@ public class mainMenuDP extends ScreenAdapter {
                 stage.addActor(hardLabel);
                 stage.addActor(indicator1);
                 stage.addActor(indicator2);
+            } else {
+                gameManager.getInstance().playSound("Teleport.ogg");
+
+                boolean exists = new File("C:/Users/Admin/.prefs/Untitled Save").exists();
+                if (!exists) {
+                    System.out.println("No Saving Progress Existed");
+                    bGame.setScreen(new mainMenuDP(bGame));
+                }
+                final checkpoint store = new checkpoint("Untitled Save");
+                gameManager.difficultyRespawn(store.prefs.getBoolean("infLives"), store.prefs.getBoolean("reset"));
+                gameManager.loadCheckpoint(store);
+
+                indicator1.setVisible(false);
+                indicator2.setVisible(true);
+
+                RunnableAction action = new RunnableAction();
+                action.setRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        bGame.setScreen(new playDP(bGame, store.getInt("level")));
+                    }
+                });
+
+                stage.addAction(new SequenceAction(Actions.delay(0.2f), Actions.fadeOut(1f), action));
             }
         }
 
@@ -207,7 +239,7 @@ public class mainMenuDP extends ScreenAdapter {
             indicator2.setPosition(xIndicator, yIndicator2);
         }
 
-        if (loaded && !selected && (Gdx.input.isKeyJustPressed(Input.Keys.X) || Gdx.input.isKeyJustPressed(Input.Keys.Z))) {
+        if (loaded && !selected && Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             gameManager.getInstance().playSound("Teleport.ogg");
 
             indicator1.setVisible(false);
@@ -217,20 +249,29 @@ public class mainMenuDP extends ScreenAdapter {
             action.setRunnable(new Runnable() {
                 @Override
                 public void run() {
+                    gameManager.initPlayerAttributes();
+                    checkpoint Store = new checkpoint("Untitled Save");
+                    gameManager.initCheckpoint(Store);
+//                    System.out.println(currentSelection);
+
                     switch (currentSelection) {
                         case 0:
+                            gameManager.difficultyRespawn(true, false);
+                            gameManager.difficultyCheckpoint(Store, true, false);
+//                            System.out.println("Easy");
+                            break;
                         case 1:
-                            gameManager.difficultyRespawn(true, true);
+                            gameManager.difficultyRespawn(false, false);
+                            gameManager.difficultyCheckpoint(Store, false, false);
+//                            System.out.println("Normal");
                             break;
                         case 2:
                             gameManager.difficultyRespawn(false, true);
-                            break;
-                        default:
-                            gameManager.difficultyRespawn(true, false);
+                            gameManager.difficultyCheckpoint(Store, false, true);
+//                            System.out.println("Hard");
                             break;
                     }
-                    checkpoint Store = new checkpoint("Untitled Save");
-                    gameManager.playerLives = Store.getInt("playerLives");
+
                     bGame.setScreen(new playDP(bGame, 1));
                 }
             });

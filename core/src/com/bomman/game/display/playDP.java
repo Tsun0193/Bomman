@@ -164,7 +164,7 @@ public class playDP extends ScreenAdapter {
             @Override
             public void clicked(InputEvent e, float x, float y) {
                 checkpoint Store = new checkpoint("Untitled Save");
-                Store.setInt("playerLives", gameManager.playerLives);
+                gameManager.save(Store);
                 bGame.setScreen(new mainMenuDP(bGame));
             }
         });

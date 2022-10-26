@@ -66,7 +66,7 @@ public class character extends Component {
         this.bombRegenerateTimeLeft = 0.0f;
         this.maxSpeed = 3.0f + gameManager.playerMaxSpeed * 1.2f;
         this.receivedDmg = 0;
-        this.acceleration = 1.5f;
+        this.acceleration = 0.8f;
     }
 
     public void damage(int dmg) {
@@ -89,7 +89,7 @@ public class character extends Component {
     public void powerUpPower() {
         if (bombPower < MAX_BOMB_POWER) {
             gameManager.playerBombPow++;
-            bombPower = 1 + gameManager.playerBombPow;
+            bombPower = gameManager.playerBombPow;
         } else {
             decreaseBombRegeneratingTime();
         }
