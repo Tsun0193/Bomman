@@ -10,11 +10,11 @@ public class Enemy extends Component {
             gameManager.EXPLOSION_BIT;
 
     public enum State {
-        dead,
+        moveUp,
         moveDown,
         moveLeft,
         moveRight,
-        moveUp,
+        dead,
         attackDown,
         attackLeft,
         attackRight,
