@@ -8,6 +8,12 @@ import com.bomman.game.game.gameManager;
 public class particle extends Component {
     public ParticleEffect particleEffect;
 
+    public particle() {
+
+    }
+    /**
+     *  Multi-variate Constructor.
+     */
     public particle(String particleFileString, float x, float y) {
         particleEffect = new ParticleEffect();
         particleEffect.load(Gdx.files.internal(particleFileString), Gdx.files.internal("particles"));
@@ -16,3 +22,4 @@ public class particle extends Component {
         particleEffect.start();
     }
 }
+/* Final */

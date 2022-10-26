@@ -23,7 +23,7 @@ public class gameManager implements Disposable {
     public static int enemiesLeft;
     public static boolean gameOver;
     public static boolean gameFinished;
-    private Queue<Entity> remoteBombQueue;
+    private final Queue<Entity> remoteBombQueue;
 
     public static final short NOTHING_BIT = 0;
     public static final short INDESTRUCTABLE_BIT = 1;
@@ -40,15 +40,15 @@ public class gameManager implements Disposable {
     public static int playerBombCount = 3;
     public static int playerBombRemaining = 0;
     public static int playerMaxSpeed = 0;
-    public static int playerBombPow = 0;
+    public static int playerBombPow = 1;
     public static float playerBombGenerateTime = 0.0f;
     public static float playerBombGenerateTimeLeft = 0.0f;
     public static boolean playerBombInteractablity = false;
     public static boolean infLives;
     public static boolean reset;
 
-    private Vector2 playerResPos;
-    private Vector2 playerGoalPos;
+    private final Vector2 playerResPos;
+    private final Vector2 playerGoalPos;
 
     /* Media Properties. */
     private String currentMusic = "";
@@ -137,18 +137,19 @@ public class gameManager implements Disposable {
      * Reset Player Properties Function.
      */
     public static void resetPlayerAttributes() {
-        playerMaxSpeed = 0;
+        playerMaxSpeed = 3;
         playerBombCount = 3;
-        playerBombPow = 0;
+        playerBombPow = 2;
         playerBombInteractablity = false;
-        playerBombGenerateTime = 3.0f;
+        playerBombGenerateTime = 2.0f;
+        playerRemoteBomb = false;
     }
 
 
     /**
      * Add Live by 1.
      */
-    public void addLive() {
+    public void addLive()   {
         playerLives++;
         playSound("Powerup.ogg");
     }
@@ -211,7 +212,6 @@ public class gameManager implements Disposable {
                 music.pause();
             }
         }
-        return;
     }
 
 
@@ -222,7 +222,6 @@ public class gameManager implements Disposable {
                 music.stop();
             }
         }
-        return;
     }
 
     //Getters and Setters
@@ -290,7 +289,7 @@ public class gameManager implements Disposable {
     /**
      * Remote Bomb Queue Getter.
      *
-     * @return
+     * @return remoteBombQueue
      */
     public Queue<Entity> getRemoteBombQueue() {
         return remoteBombQueue;
@@ -335,3 +334,4 @@ public class gameManager implements Disposable {
         assetManager.dispose();
     }
 }
+/* Final */

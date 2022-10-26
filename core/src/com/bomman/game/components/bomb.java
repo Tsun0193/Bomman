@@ -8,12 +8,12 @@ public class bomb extends Component {
             gameManager.BREAKABLE_BIT |
             gameManager.EXPLOSION_BIT;
     public enum State {
-        normal,
+        NORMAL,
         moveUp,
         moveDown,
         moveLeft,
         moveRight,
-        explode
+        EXPLODING
     }
     public State state;
     public float cd;
@@ -32,7 +32,7 @@ public class bomb extends Component {
         this.power = power;
         this.cd = cd;
         this.speed = 6.0f;
-        state = State.normal;
+        state = State.NORMAL;
     }
 
     public void setMove(bomb.State state) {
@@ -40,3 +40,4 @@ public class bomb extends Component {
     }
 
 }
+/* FINAL */

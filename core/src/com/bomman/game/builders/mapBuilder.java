@@ -42,6 +42,15 @@ public class mapBuilder {
     protected Pixmap pixmap;
     protected TextureAtlas tileTextureAtlas;
 
+    /**
+     * Constructor
+     * @param box2DWorld Mechanics
+     * @param world Controller
+     * @param lv level
+     *           <p>
+     *           Pixmap - Pixel map: Image loaded in memory.
+     *           </p>
+     */
     public mapBuilder(World box2DWorld, com.artemis.World world, int lv) {
         this.box2DWorld = box2DWorld;
         this.world = world;
@@ -72,6 +81,8 @@ public class mapBuilder {
         actorBuilder builder = actorBuilder.init(box2DWorld, world);
         int colorCode;
 
+        //creating blocks on map.
+        //scale implemented by author.
         for (int i = 0; i < mapH; i++) {
             for (int j = 0; j < mapW; j++) {
                 colorCode = pixmap.getPixel(j, mapH - i - 1);
@@ -141,3 +152,4 @@ public class mapBuilder {
         return sprite;
     }
 }
+/* FINAL */

@@ -10,15 +10,15 @@ public class Enemy extends Component {
             gameManager.EXPLOSION_BIT;
 
     public enum State {
+        moveUp,
+        moveDown,
+        moveLeft,
+        moveRight,
         dead,
-        walkDown,
-        walkLeft,
-        walkRight,
-        walkUp,
-        atkDown,
-        atkLeft,
-        atkRight,
-        atkUp,
+        attackDown,
+        attackLeft,
+        attackRight,
+        attackUp,
         damaged;
         public static State getRandWalkingState() {
             return values()[(int)(Math.random()*4)];
@@ -35,6 +35,9 @@ public class Enemy extends Component {
     private String sound;
     public String type;
 
+    public Enemy() {
+        
+    }
     public Enemy(int hp) {
         this(hp, 2);
     }
@@ -82,5 +85,6 @@ public class Enemy extends Component {
     }
 
 }
+/* Final */
 
 

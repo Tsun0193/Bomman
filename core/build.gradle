@@ -7,5 +7,4 @@ eclipse.project.name = appName + "-core"
 
 dependencies {
     implementation "net.onedaybeard.artemis:artemis-odb:2.3.0"
-
 }

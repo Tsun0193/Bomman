@@ -9,3 +9,4 @@ public class explosion extends Component {
             gameManager.ENEMY_BIT |
             gameManager.BREAKABLE_BIT;
 }
+/* Final */

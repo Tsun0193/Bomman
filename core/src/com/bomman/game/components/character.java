@@ -40,14 +40,23 @@ public class character extends Component {
     public float godTimer;
     public int receivedDmg;
 
+    public character() {
+
+    }
+
+    /**
+     * Uni-variate Constructor.
+     * @param resetPlayerAttributes boolean
+     */
     public character(boolean resetPlayerAttributes) {
         state = State.idleRight;
 
         if (resetPlayerAttributes) {
             gameManager.resetPlayerAttributes();
         }
-
-        this.hp = 3;
+        this.remoteBomb = gameManager.playerRemoteBomb;
+        this.kickBomb = gameManager.playerKickBomb;
+        this.hp = 1;
         this.bombCapacity = gameManager.playerBombCount;
         this.bombRemaining = 0;
         this.bombPower = gameManager.playerBombPow;
@@ -55,8 +64,9 @@ public class character extends Component {
         this.godTimer = 3.0f;
         this.bombRegenerateTime = gameManager.playerBombGenerateTime;
         this.bombRegenerateTimeLeft = 0.0f;
-        this.maxSpeed = 5.0f + gameManager.playerMaxSpeed * 1.25f;
+        this.maxSpeed = 3.0f + gameManager.playerMaxSpeed * 1.2f;
         this.receivedDmg = 0;
+        this.acceleration = 1.5f;
     }
 
     public void damage(int dmg) {
@@ -130,5 +140,6 @@ public class character extends Component {
         bombRegenerateTimeLeft = MathUtils.clamp(bombRegenerateTimeLeft, 0, bombRegenerateTime);
     }
 }
+/* Final */
 
 

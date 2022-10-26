@@ -40,12 +40,20 @@ public class buff extends Component {
 
     public float life;
 
+    /**
+     * Default Constructor.
+     */
     public buff() {
         this(6.0f);
     }
 
+    /**
+     * Uni-variate Constructor.
+     * @param life float
+     */
     public buff(float life) {
         type = Type.getRandomType();
         this.life = life;
     }
 }
+/* FINAL */
