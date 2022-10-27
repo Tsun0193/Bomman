@@ -154,19 +154,6 @@ public class gameManager implements Disposable {
         resetPlayerAttributes();
     }
 
-    public static void initCheckpoint(checkpoint store) {
-        store.prefs.putInteger("level", level);
-        store.prefs.putInteger("playerLives", 3);
-        store.prefs.putInteger("playerMaxSpeed", 3);
-        store.prefs.putInteger("playerBombCount", 1);
-        store.prefs.putInteger("playerBombPow", 1);
-        store.prefs.putBoolean("playerBombInteractablity", false);
-        store.prefs.putBoolean("playerRemoteBomb", false);
-        store.prefs.putBoolean("gameOver", gameOver);
-        store.prefs.putFloat("playerBombGenerateTime", 2.0f);
-        store.prefs.flush();
-    }
-
     public static void save(checkpoint store) {
         store.prefs.putInteger("level", level);
         store.prefs.putInteger("playerLives", playerLives);
