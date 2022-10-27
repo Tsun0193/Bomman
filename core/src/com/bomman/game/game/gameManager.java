@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
+import com.bomman.game.checkpoint.checkpoint;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -20,6 +21,7 @@ public class gameManager implements Disposable {
     public static final float PPM = 16.0f;
     /* TODO: Game Properties. */
     public static final int levels = 5;
+    public static int level;
     public static int enemiesLeft;
     public static boolean gameOver;
     public static boolean gameFinished;
@@ -138,11 +140,58 @@ public class gameManager implements Disposable {
      */
     public static void resetPlayerAttributes() {
         playerMaxSpeed = 3;
-        playerBombCount = 3;
-        playerBombPow = 2;
+        playerBombCount = 1;
+        playerBombPow = 1;
         playerBombInteractablity = false;
         playerBombGenerateTime = 2.0f;
         playerRemoteBomb = false;
+    }
+
+    public static void initPlayerAttributes() {
+        playerLives = 3;
+        level = 1;
+        resetPlayerAttributes();
+    }
+
+    public static void initCheckpoint(checkpoint store) {
+        store.prefs.putInteger("level", level);
+        store.prefs.putInteger("playerLives", 3);
+        store.prefs.putInteger("playerMaxSpeed", 3);
+        store.prefs.putInteger("playerBombCount", 1);
+        store.prefs.putInteger("playerBombPow", 1);
+        store.prefs.putBoolean("playerBombInteractablity", false);
+        store.prefs.putBoolean("playerRemoteBomb", false);
+        store.prefs.putFloat("playerBombGenerateTime", 2.0f);
+        store.prefs.flush();
+    }
+
+    public static void save(checkpoint store) {
+        store.prefs.putInteger("level", level);
+        store.prefs.putInteger("playerLives", playerLives);
+        store.prefs.putInteger("playerMaxSpeed", playerMaxSpeed);
+        store.prefs.putInteger("playerBombCount", playerBombCount);
+        store.prefs.putInteger("playerBombPow", playerBombPow);
+        store.prefs.putBoolean("playerBombInteractablity", playerBombInteractablity);
+        store.prefs.putBoolean("playerRemoteBomb", playerRemoteBomb);
+        store.prefs.putFloat("playerBombGenerateTime", playerBombGenerateTime);
+        store.prefs.flush();
+    }
+
+    public static void difficultyCheckpoint(checkpoint store, boolean b1, boolean b2) {
+        store.prefs.putBoolean("infLives", b1);
+        store.prefs.putBoolean("reset", b2);
+        store.prefs.flush();
+    }
+
+    public static void loadCheckpoint(checkpoint store) {
+        playerLives = store.prefs.getInteger("playerLives");
+        playerMaxSpeed = store.prefs.getInteger("playerMaxSpeed");
+        playerBombCount = store.prefs.getInteger("playerBombCount");
+        playerBombPow = store.prefs.getInteger("playerBombPow");
+        playerBombInteractablity = store.prefs.getBoolean("playerBombInteractablity");
+        playerRemoteBomb = store.prefs.getBoolean("playerRemoteBomb");
+        playerBombGenerateTime = store.prefs.getFloat("playerBombGenerateTime");
+        store.prefs.flush();
     }
 
 
