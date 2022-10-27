@@ -52,9 +52,9 @@ public class enemySys extends IteratingSystem {
             case "boss1":
 //                handleBoss1(entityId);
                 break;
-            case "bomb":
+//            case "bomb":
 //                handleBombEnemy(entityId);
-                break;
+//                break;
             default:
                 handleBasics(entityId);
                 break;
