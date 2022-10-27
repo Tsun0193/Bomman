@@ -23,7 +23,6 @@ import com.bomman.game.checkpoint.checkpoint;
 import com.bomman.game.game.gameManager;
 
 import java.io.File;
-import java.io.IOException;
 
 
 public class mainMenuDP extends ScreenAdapter {
