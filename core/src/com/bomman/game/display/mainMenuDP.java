@@ -23,6 +23,7 @@ import com.bomman.game.checkpoint.checkpoint;
 import com.bomman.game.game.gameManager;
 
 import java.io.File;
+import java.io.IOException;
 
 
 public class mainMenuDP extends ScreenAdapter {
@@ -178,27 +179,37 @@ public class mainMenuDP extends ScreenAdapter {
             } else {
                 gameManager.getInstance().playSound("Teleport.ogg");
 
-                boolean exists = new File("C:/Users/Admin/.prefs/Untitled Save").exists();
-                if (!exists) {
+                File file = new File("C:/Users/Admin/.prefs/Untitled Save");
+                if (!file.exists()) {
                     System.out.println("No Saving Progress Existed");
                     bGame.setScreen(new mainMenuDP(bGame));
-                }
-                final checkpoint store = new checkpoint("Untitled Save");
-                gameManager.difficultyRespawn(store.prefs.getBoolean("infLives"), store.prefs.getBoolean("reset"));
-                gameManager.loadCheckpoint(store);
+                } else {
+                    final checkpoint store = new checkpoint("Untitled Save");
+                    if (store.prefs.getInteger("clock") == 0) { // created but not edited.
+                        System.out.println("No Saving Progress Existed");
+                        bGame.setScreen(new mainMenuDP(bGame));
+                    } else {
+                        gameManager.difficultyRespawn(store.prefs.getBoolean("infLives"), store.prefs.getBoolean("reset"));
+                        gameManager.loadCheckpoint(store);
 
-                indicator1.setVisible(false);
-                indicator2.setVisible(true);
+                        indicator1.setVisible(false);
+                        indicator2.setVisible(true);
 
-                RunnableAction action = new RunnableAction();
-                action.setRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        bGame.setScreen(new playDP(bGame, store.getInt("level")));
+                        if (!store.prefs.getBoolean("gameOver")) {
+                            System.out.println("No Saving Progress Saved");
+                            bGame.setScreen(new mainMenuDP(bGame));
+                        }
+                        RunnableAction action = new RunnableAction();
+                        action.setRunnable(new Runnable() {
+                            @Override
+                            public void run() {
+                                bGame.setScreen(new playDP(bGame, store.prefs.getInteger("level")));
+                            }
+                        });
+
+                        stage.addAction(new SequenceAction(Actions.delay(0.2f), Actions.fadeOut(1f), action));
                     }
-                });
-
-                stage.addAction(new SequenceAction(Actions.delay(0.2f), Actions.fadeOut(1f), action));
+                }
             }
         }
 
@@ -251,6 +262,7 @@ public class mainMenuDP extends ScreenAdapter {
                 public void run() {
                     gameManager.initPlayerAttributes();
                     checkpoint Store = new checkpoint("Untitled Save");
+                    Store.prefs.putInteger("clock", 1);
                     gameManager.initCheckpoint(Store);
 //                    System.out.println(currentSelection);
 
