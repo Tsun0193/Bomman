@@ -262,6 +262,8 @@ public class playDP extends ScreenAdapter {
                             })
                     )));
             changeScr = true;
+            checkpoint Store = new checkpoint("Untitled Save");
+            Store.prefs.putBoolean("gameOver", true);
         }
     }
 
