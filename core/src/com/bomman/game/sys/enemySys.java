@@ -34,7 +34,7 @@ public class enemySys extends IteratingSystem {
             new Vector2(7.5f, 5.5f)
     };
 
-    private final int boss1CurrentTarget = MathUtils.random(0, 3);
+    private int boss1CurrentTarget = MathUtils.random(0, 3);
 
     public enemySys() {
         super(Aspect.all(Enemy.class, transform.class, rigidBody.class, state.class));
@@ -158,33 +158,6 @@ public class enemySys extends IteratingSystem {
         }
     }
 
-    private boolean hitVertical(Body body, Vector2 set, Vector2 set1) {
-        World b2dWorld = body.getWorld();
-        hit = false;
-
-        RayCastCallback rayCastCallback = new RayCastCallback() {
-
-            @Override
-            public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
-                if (fixture.getFilterData().categoryBits == gameManager.PLAYER_BIT || fixture.getFilterData().categoryBits == gameManager.POWERUP_BIT) {
-                    return 0;
-                }
-
-                if (fraction < 1.0f) {
-                    hit = true;
-                }
-                return 0;
-            }
-        };
-
-        for (int i = 0; i < 3; i++) {
-            Vector2 tmpV = new Vector2(set1);
-            b2dWorld.rayCast(rayCastCallback, set, tmpV.add((1 - i) * 0.4f, 0));
-
-        }
-        return hit;
-    }
-
     private void handleBombEnemy(int entityId) {
         Body body = rBody.body;
         actorBuilder actorBuilder = com.bomman.game.builders.actorBuilder.init(body.getWorld(), world);
@@ -302,6 +275,131 @@ public class enemySys extends IteratingSystem {
                 break;
         }
     }
+    private void handleBoss1(int entityId) {
+        Body body = rBody.body;
+        actorBuilder actorBuilder = com.bomman.game.builders.actorBuilder.init(body.getWorld(), world);
+
+        if (boss1TargetCorners[boss1CurrentTarget].dst2(body.getPosition()) < 0.1f) {
+            boss1CurrentTarget = MathUtils.random(0, 3);
+        }
+
+        if (enemy.receivedDmg > 0) {
+            if (enemy.state != Enemy.State.damaged) {
+                enemy.damage(1);    // boss only take 1 damage per time
+
+                // chance to create PowerUp item
+                if (Math.random() < 0.2) {
+                    actorBuilder.createBuff(body.getPosition().x, body.getPosition().y - 2f);
+                }
+            }
+            enemy.receivedDmg = 0;
+            enemy.state = Enemy.State.damaged;
+        }
+
+        if (enemy.hp <= 0) {
+            enemy.state = Enemy.State.dead;
+        }
+
+        enemy.lifespan += world.getDelta();
+
+        // Boss1 attack
+        if (enemy.hp > 0 && MathUtils.random() < 0.005) {
+            enemy.state = Enemy.State.attackDown;
+        }
+
+        switch (enemy.state) {
+            case attackLeft:
+            case attackRight:
+            case attackUp:
+            case attackDown:
+                State.setCurrentState("attacking_down");
+                if (State.getStateTime() > 0.6f) {
+                    actorBuilder.createExplosion(body.getPosition().x, body.getPosition().y - 4f, 1);
+                    gameManager.getInstance().playSound("Boss1Hammer.ogg");
+                    changeWalkingState(enemy);
+                }
+                break;
+            case damaged:
+                State.setCurrentState("damaged");
+                if (State.getStateTime() > 0.2f) {
+                    changeWalkingState(enemy);
+                }
+                break;
+            case dead:
+                State.setCurrentState("dying");
+                Filter filter = body.getFixtureList().get(0).getFilterData();
+                filter.maskBits = gameManager.NOTHING_BIT;
+                body.getFixtureList().get(0).setFilterData(filter);
+
+                if (State.getStateTime() <= 0) {
+                    actorBuilder.createBoss1Explosion(body.getPosition().x, body.getPosition().y);
+                    enemy.lifespan = 0;
+                }
+
+                if (enemy.lifespan > 0.2f) {
+                    gameManager.getInstance().playSound("Explosion.ogg", 1.0f, MathUtils.random(0.9f, 1.1f), 0);
+                    enemy.lifespan -= 0.4f;
+                }
+
+                if (State.getStateTime() > 2.2f) {
+                    // decrease enemy count
+                    gameManager.enemiesLeft--;
+
+                    // if no enemy left, create the portal
+                    if (gameManager.enemiesLeft <= 0) {
+                        actorBuilder.createPortal();
+                        gameManager.getInstance().playSound("PortalAppears.ogg");
+                        gameManager.getInstance().playMusic("Victory.ogg", false);
+                    }
+
+                    body.getWorld().destroyBody(body);
+                    world.delete(entityId);
+                }
+                break;
+            case moveLeft:
+            case moveRight:
+            case moveUp:
+            case moveDown:
+            default:
+                State.setCurrentState("walking_down");
+                toVector.set(boss1TargetCorners[boss1CurrentTarget]);
+                toVector.sub(body.getPosition());
+                toVector.nor();
+
+                if (body.getLinearVelocity().len2() < enemy.getSpeed() * enemy.getSpeed()) {
+                    body.applyLinearImpulse(toVector.scl(enemy.getSpeed()), body.getWorldCenter(), true);
+                }
+                break;
+        }
+    }
+    private boolean hitVertical(Body body, Vector2 set, Vector2 set1) {
+        World b2dWorld = body.getWorld();
+        hit = false;
+
+        RayCastCallback rayCastCallback = new RayCastCallback() {
+
+            @Override
+            public float reportRayFixture(Fixture fixture, Vector2 point, Vector2 normal, float fraction) {
+                if (fixture.getFilterData().categoryBits == gameManager.PLAYER_BIT || fixture.getFilterData().categoryBits == gameManager.POWERUP_BIT) {
+                    return 0;
+                }
+
+                if (fraction < 1.0f) {
+                    hit = true;
+                }
+                return 0;
+            }
+        };
+
+        for (int i = 0; i < 3; i++) {
+            Vector2 tmpV = new Vector2(set1);
+            b2dWorld.rayCast(rayCastCallback, set, tmpV.add((1 - i) * 0.4f, 0));
+
+        }
+        return hit;
+    }
+
+
     private boolean hitHorizontal(Body body, Vector2 set, Vector2 set1) {
         World b2dWorld = body.getWorld();
         hit = false;
