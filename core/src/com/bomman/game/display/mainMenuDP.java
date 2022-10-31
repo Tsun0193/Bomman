@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -197,7 +198,15 @@ public class mainMenuDP extends ScreenAdapter {
                             System.out.println("No Saving Progress Saved");
                             bGame.setScreen(new mainMenuDP(bGame));
                         } else {
-                            stage.addAction(new SequenceAction(Actions.fadeOut(1f), Actions.run(() -> bGame.setScreen(new playDP(bGame, store.prefs.getInteger("level"))))));
+                            RunnableAction action = new RunnableAction();
+                            action.setRunnable(new Runnable() {
+                                @Override
+                                public void run() {
+                                    bGame.setScreen(new playDP(bGame, store.prefs.getInteger("level")));
+                                }
+                            });
+
+                            stage.addAction(new SequenceAction(Actions.delay(0.2f), Actions.fadeOut(1f), action));
                         }
                     }
                 }
@@ -249,31 +258,37 @@ public class mainMenuDP extends ScreenAdapter {
             final checkpoint Store = new checkpoint("Untitled Save");
             Store.prefs.putInteger("clock", 1);
             Store.prefs.flush();
-            stage.addAction(new SequenceAction(Actions.fadeOut(1f), Actions.run(() -> {
-                gameManager.initPlayerAttributes();
-                Store.initCheckpoint();
+            RunnableAction action = new RunnableAction();
+            action.setRunnable(new Runnable() {
+                @Override
+                public void run() {
+                    gameManager.initPlayerAttributes();
+                    Store.initCheckpoint();
 //                    System.out.println(currentSelection);
 
-                switch (currentSelection) {
-                    case 0:
-                        gameManager.difficultyRespawn(true, false);
-                        gameManager.difficultyCheckpoint(Store, true, false);
+                    switch (currentSelection) {
+                        case 0:
+                            gameManager.difficultyRespawn(true, false);
+                            gameManager.difficultyCheckpoint(Store, true, false);
 //                            System.out.println("Easy");
-                        break;
-                    case 1:
-                        gameManager.difficultyRespawn(false, false);
-                        gameManager.difficultyCheckpoint(Store, false, false);
+                            break;
+                        case 1:
+                            gameManager.difficultyRespawn(false, false);
+                            gameManager.difficultyCheckpoint(Store, false, false);
 //                            System.out.println("Normal");
-                        break;
-                    case 2:
-                        gameManager.difficultyRespawn(false, true);
-                        gameManager.difficultyCheckpoint(Store, false, true);
+                            break;
+                        case 2:
+                            gameManager.difficultyRespawn(false, true);
+                            gameManager.difficultyCheckpoint(Store, false, true);
 //                            System.out.println("Hard");
-                        break;
-                }
+                            break;
+                    }
 
-                bGame.setScreen(new playDP(bGame, 1));
-            })));
+                    bGame.setScreen(new playDP(bGame, 1));
+                }
+            });
+
+            stage.addAction(new SequenceAction(Actions.delay(0.2f), Actions.fadeOut(1f), action));
         }
     }
 
