@@ -6,13 +6,28 @@
 	<inherits name='Box2DLights' />
 	<inherits name='com.badlogic.gdx.ai' />
 	<inherits name='javax.annotation.Annotation'/>
-<!--	<inherits name='com.bomman.game.java.util.regex'/>-->
+	<inherits name='javax.annotation.Regex'/>
 	<inherits name='com.artemis.backends.artemis_backends_gwt' />
 
 	<extend-configuration-property name="artemis.reflect.include" value="com.bomman.game.components" />
 	<extend-configuration-property name="artemis.reflect.include" value="com.bomman.game.sys" />
 	<extend-configuration-property name="gdx.reflect.include" value="com.bomman.game.components"/>
 	<extend-configuration-property name="gdx.reflect.include" value="com.bomman.game.sys"/>
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g3d.particles.renderers.BillboardControllerRenderData" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g3d.particles.ParticleEffect" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g3d.particles.ParticleController" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g3d.particles.ResourceData" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g3d.particles.ResourceData.SaveData" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g3d.particles.ResourceData.AssetData" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g3d.particles.ParallelArray" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g3d.particles.values" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g3d.particles.emitters" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g3d.particles.influencers" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g3d.particles.renderers" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g3d.particles.batches.BillboardParticleBatch$Config" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g3d.particles.ParticleShader" />
+	<extend-configuration-property name="gdx.reflect.include" value="com.badlogic.gdx.graphics.g3d.particles.ParticleShader$AlignMode" />
 
 	<inherits name='BGame' />
 	<entry-point class='com.bomman.game.client.HtmlLauncher' />

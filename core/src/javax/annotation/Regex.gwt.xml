@@ -1,0 +1,3 @@
+<module>
+    <source path="" excludes="MatchesPattern.java,RegEx.java"/>
+</module>
