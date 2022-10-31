@@ -41,8 +41,8 @@ public class gameManager implements Disposable {
     public static int playerLives = 3;
     public static int playerBombCount = 3;
     public static int playerBombRemaining = 0;
-    public static int playerMaxSpeed = 0;
-    public static int playerBombPow = 1;
+    public static int playerMaxSpeed = 3;
+    public static int playerBombPow = 3;
     public static float playerBombGenerateTime = 0.0f;
     public static float playerBombGenerateTimeLeft = 0.0f;
     public static boolean playerBombInteractablity = false;
