@@ -41,8 +41,8 @@ public class gameManager implements Disposable {
     public static int playerLives = 3;
     public static int playerBombCount = 3;
     public static int playerBombRemaining = 0;
-    public static int playerMaxSpeed = 0;
-    public static int playerBombPow = 1;
+    public static int playerMaxSpeed = 3;
+    public static int playerBombPow = 3;
     public static float playerBombGenerateTime = 0.0f;
     public static float playerBombGenerateTimeLeft = 0.0f;
     public static boolean playerBombInteractablity = false;
@@ -150,19 +150,8 @@ public class gameManager implements Disposable {
     public static void initPlayerAttributes() {
         playerLives = 3;
         level = 1;
+        gameOver = false;
         resetPlayerAttributes();
-    }
-
-    public static void initCheckpoint(checkpoint store) {
-        store.prefs.putInteger("level", level);
-        store.prefs.putInteger("playerLives", 3);
-        store.prefs.putInteger("playerMaxSpeed", 3);
-        store.prefs.putInteger("playerBombCount", 1);
-        store.prefs.putInteger("playerBombPow", 1);
-        store.prefs.putBoolean("playerBombInteractablity", false);
-        store.prefs.putBoolean("playerRemoteBomb", false);
-        store.prefs.putFloat("playerBombGenerateTime", 2.0f);
-        store.prefs.flush();
     }
 
     public static void save(checkpoint store) {
@@ -173,6 +162,7 @@ public class gameManager implements Disposable {
         store.prefs.putInteger("playerBombPow", playerBombPow);
         store.prefs.putBoolean("playerBombInteractablity", playerBombInteractablity);
         store.prefs.putBoolean("playerRemoteBomb", playerRemoteBomb);
+        store.prefs.putBoolean("gameOver", gameOver);
         store.prefs.putFloat("playerBombGenerateTime", playerBombGenerateTime);
         store.prefs.flush();
     }
