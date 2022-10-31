@@ -184,13 +184,13 @@ public class enemySys extends IteratingSystem {
 
         switch (enemy.state) {
             case attackLeft:
-                State.setCurrentState("attackLeft");
+                State.setCurrentState("attacking_left");
                 break;
             case attackRight:
-                State.setCurrentState("attackRight");
+                State.setCurrentState("attacking_right");
                 break;
             case attackUp:
-                State.setCurrentState("attackUp");
+                State.setCurrentState("attacking_up");
                 if (State.getStateTime() > 3f) {
                     // spawn a bomb-enemy
                     enemy.state = Enemy.State.getRandWalkingState();
@@ -198,10 +198,10 @@ public class enemySys extends IteratingSystem {
                 }
                 break;
             case attackDown:
-                State.setCurrentState("attackDown");
+                State.setCurrentState("attacking_down");
                 break;
             case dead:
-                State.setCurrentState("dead");
+                State.setCurrentState("dying");
                 Filter filter = body.getFixtureList().get(0).getFilterData();
                 filter.maskBits = gameManager.NOTHING_BIT;
                 body.getFixtureList().get(0).setFilterData(filter);
@@ -237,7 +237,7 @@ public class enemySys extends IteratingSystem {
                 }
                 break;
             case moveLeft:
-                State.setCurrentState("moveLeft");
+                State.setCurrentState("walking_left");
                 if (body.getLinearVelocity().x > -enemy.getSpeed()) {
                     body.applyLinearImpulse(new Vector2(-enemy.getSpeed() * body.getMass(), 0), body.getWorldCenter(), true);
                 }
@@ -246,7 +246,7 @@ public class enemySys extends IteratingSystem {
                 }
                 break;
             case moveRight:
-                State.setCurrentState("moveRight");
+                State.setCurrentState("walking_right");
                 if (body.getLinearVelocity().x < enemy.getSpeed()) {
                     body.applyLinearImpulse(new Vector2(enemy.getSpeed() * body.getMass(), 0), body.getWorldCenter(), true);
                 }
@@ -255,7 +255,7 @@ public class enemySys extends IteratingSystem {
                 }
                 break;
             case moveUp:
-                State.setCurrentState("moveUp");
+                State.setCurrentState("walking_up");
                 if (body.getLinearVelocity().y < enemy.getSpeed()) {
                     body.applyLinearImpulse(new Vector2(0, enemy.getSpeed() * body.getMass()), body.getWorldCenter(), true);
                 }
@@ -265,7 +265,7 @@ public class enemySys extends IteratingSystem {
                 break;
             case moveDown:
             default:
-                State.setCurrentState("moveDown");
+                State.setCurrentState("walking_down");
                 if (body.getLinearVelocity().y > -enemy.getSpeed()) {
                     body.applyLinearImpulse(new Vector2(0, -enemy.getSpeed() * body.getMass()), body.getWorldCenter(), true);
                 }
@@ -312,7 +312,7 @@ public class enemySys extends IteratingSystem {
             case attackRight:
             case attackUp:
             case attackDown:
-                State.setCurrentState("attackDown");
+                State.setCurrentState("attacking_down");
                 if (State.getStateTime() > 0.6f) {
                     actorBuilder.createExplosion(body.getPosition().x, body.getPosition().y - 4f, 1);
                     gameManager.getInstance().playSound("Boss1Hammer.ogg");
@@ -326,7 +326,7 @@ public class enemySys extends IteratingSystem {
                 }
                 break;
             case dead:
-                State.setCurrentState("dead");
+                State.setCurrentState("dying");
                 Filter filter = body.getFixtureList().get(0).getFilterData();
                 filter.maskBits = gameManager.NOTHING_BIT;
                 body.getFixtureList().get(0).setFilterData(filter);
@@ -361,7 +361,7 @@ public class enemySys extends IteratingSystem {
             case moveUp:
             case moveDown:
             default:
-                State.setCurrentState("movedown");
+                State.setCurrentState("walking_down");
                 toVector.set(boss1TargetCorners[boss1CurrentTarget]);
                 toVector.sub(body.getPosition());
                 toVector.nor();
