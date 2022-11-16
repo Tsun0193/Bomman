@@ -1,7 +1,7 @@
 # Bomman
 Bomberman_2.0
 
-Substitutional Java Project For Major Assignment Of Class INT2210 41 - UET - VNU.
+Substitutional Java Project For Major Assignment Of Class INT2204 43 - UET - VNU.
 Language: Java
 
 Contributors:  
